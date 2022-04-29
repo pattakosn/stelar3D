@@ -1,0 +1,13 @@
+{ 
+	"name" : "stelar3d",
+	"description": [ "modern(non fixed pipeline) OpenGL 3D graphics toy code to experiment with 3D graphics.",
+                         "Using glad, SDL2, glm, soil2, assimp libraries"
+	],
+	"version-string": "0.0",
+	"dependencies": [
+	{ "name":"glad","features":["gl-api-45","extensions"] },
+	 "sdl2",
+	 "glm",
+	 "assimp"
+	]
+}
