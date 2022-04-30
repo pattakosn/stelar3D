@@ -3,4 +3,4 @@
 	url = https://github.com/Microsoft/vcpkg
 [submodule "assets/extra"]
 	path = assets/extra
-	url = https://github.com/pattakosn/assets
+	url = git@github.com:pattakosn/assets.git
