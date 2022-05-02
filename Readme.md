@@ -1,23 +1,21 @@
 this is my repo with my take on the amazing [Joey de Vries' www.learnopengl.com tutorials](https://learnopengl.com).
 
-using vcpkg as a submodule to manage dependencies:
+using these dependencies:
 * [SDL2](https://www.libsdl.org/)
-* [GLAD](https://github.com/Dav1dde/glad)
-* [GLM](https://github.com/g-truc/glm)
 * [Assimp](https://assimp.org/)
-* [Soil2](https://github.com/SpartanJ/soil2)
+* [stb\_image](https://github.com/nothings/stb)
+* ~ [GLAD](https://github.com/Dav1dde/glad) ~
+* ~ [GLM](https://github.com/g-truc/glm) ~
+* ~ [Soil2](https://github.com/SpartanJ/soil2) ~
+using vcpkg package manager to automate installation of these.
+vcpkg does not really work for me on windows+gcc/clang. soil2 i do not need for now so i am no longer including it. I also include a hard copy of glaf and glm to make my life easier.
 
-if you did not use 
 ```
 git checkout --recurse-submodules
-```
-
-you can do
-```
 git submodule init
 git submodule update
-```
 git submodule update --remote
+```
 
 Windows:
 ```

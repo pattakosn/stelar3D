@@ -31,7 +31,7 @@ int main(int, char *[]) {
     box.bind();
     lamp.add_attribute_floats_array(0, 3, 8, 0);
 
-    glm::vec3 lightPos(5.75f, 5.75f, 5.75f);
+    //glm::vec3 lightPos(5.75f, 5.75f, 5.75f);
     FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
     //my_cam.MovementSpeed = 100.;
 

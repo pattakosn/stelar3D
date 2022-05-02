@@ -15,13 +15,13 @@ int main(int, char*[]) {
     stbi_set_flip_vertically_on_load(true);
     Shader shader("../shaders/model.vert", "../shaders/model.frag");
 
-    model celt("../assets/celt/Celt 07.fbx", textures_are_flipped);
+    model celt("../assets/extra/celt/Celt 07.fbx", textures_are_flipped);
     model backpack("../assets/backpack/backpack.obj", textures_are_flipped);
-    model nanosuit("../assets/nanosuit/nanosuit.obj", textures_are_flipped);
-    model cyborg("../assets/cyborg/cyborg.obj", textures_are_flipped);
-    model planet("../assets/planet/planet.obj", textures_are_flipped);
-    model rock("../assets/rock/rock.obj", textures_are_flipped);
-    model vampire("../assets/vampire/dancing_vampire.dae", textures_are_flipped);
+    model nanosuit("../assets/extra/nanosuit/nanosuit.obj", textures_are_flipped);
+    model cyborg("../assets/extra/cyborg/cyborg.obj", textures_are_flipped);
+    model planet("../assets/extra/planet/planet.obj", textures_are_flipped);
+    model rock("../assets/extra/rock/rock.obj", textures_are_flipped);
+    model vampire("../assets/extra/vampire/dancing_vampire.dae", textures_are_flipped);
     //model backpack("../assets/hk433/hk443.obj", textures_are_flipped);
     //model backpack("../assets/train/train.fbx", textures_are_flipped);
 

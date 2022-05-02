@@ -8,7 +8,7 @@ texture::texture() {
 }
 
 texture::texture(const std::string fname, bool flipped) : texture() {
-    load_image(fname);
+    load_image(fname, flipped);
 }
 
 texture::texture(texture &&other) noexcept: tex(other.tex) { //, type(other.type), path(other.path) {

@@ -4,5 +4,8 @@
                          "Using glad, SDL2, glm, soil2, assimp libraries"
 	],
 	"version-string": "0.0",
-	"dependencies": [ "assimp" ]
+	"dependencies": [
+	 "sdl2",
+	 "assimp"
+	]
 }

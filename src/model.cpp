@@ -119,7 +119,7 @@ mesh_item model::process_mesh(aiMesh *mesh, const aiScene *scene, const bool fli
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-vector<Texture> model::load_material_textures(aiMaterial *mat, aiTextureType type, string typeName, const bool flipped_textures)
+vector<Texture> model::load_material_textures(aiMaterial *mat, aiTextureType type, string typeName, const bool /*flipped_textures*/)
 {
     vector<Texture> textures;
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
@@ -153,7 +153,7 @@ vector<Texture> model::load_material_textures(aiMaterial *mat, aiTextureType typ
     return textures;
 }
 
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
+unsigned int TextureFromFile(const char *path, const string &directory, bool /*gamma*/)
 {
     string filename = string(path);
     filename = directory + '/' + filename;
@@ -164,7 +164,7 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
     int width, height, nrComponents;
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data) {
-        GLenum format;
+        GLenum format = 0;
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)

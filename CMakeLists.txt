@@ -16,7 +16,7 @@ set( CMAKE_TOOLCHAIN_FILE
 cmake_minimum_required (VERSION 3.18)
 project(stelar3D)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON )
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -35,14 +35,16 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
-find_package(glad CONFIG REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(glm REQUIRED)
+add_subdirectory(external/glm)
+add_subdirectory(external/glad)
+find_package(SDL2 CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
-#find_package(soil2 CONFIG REQUIRED)
-list(APPEND LIBS SDL2::SDL2 SDL2::SDL2main assimp::assimp glad::glad )
-list(APPEND LIBS ${CMAKE_DL_LIBS})
+#find_package(OpenGL REQUIRED)
+#add_definitions(${OPENGL_DEFINITIONS})
+#find_package(X11 REQUIRED)
+#set(LIBS ${LIBS} X11 Xrandr Xinerama Xi Xxf86vm Xcursor GL dl pthread  stelar3D PARENT_SCOPE)
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT IPOsupported OUTPUT IPOerror)
 
 add_subdirectory(src)
-
-message( "Using: ${LIBS}")

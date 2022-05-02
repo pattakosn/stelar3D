@@ -14,7 +14,8 @@ class model
 {
 public:
     // constructor, expects a filepath to a 3D model.
-    explicit model(string const &path, bool flipped_textures = true, bool gamma = false) : gammaCorrection(gamma) {
+    //explicit model(string const &path, bool flipped_textures = true, bool gamma = false) : gammaCorrection(gamma) {
+    explicit model(string const &path, bool flipped_textures = true) {
         //Assimp::DefaultLogger::create(string(path + "log.txt").c_str(), Assimp::Logger::VERBOSE);
         Assimp::DefaultLogger::create("", Assimp::Logger::VERBOSE);
         Assimp::LogStream* stderrStream = Assimp::LogStream::createDefaultStream(aiDefaultLogStream_STDERR);
@@ -35,7 +36,7 @@ private:
     vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     vector<mesh_item> meshes;
     string directory;
-    bool gammaCorrection;
+    //bool gammaCorrection;
 
     void load_model(string const& path, bool flipped_textures);
     void process_node(aiNode *node, const aiScene *scene, bool flipped_textures);
