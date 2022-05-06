@@ -6,7 +6,6 @@ set( CMAKE_TOOLCHAIN_FILE
 #  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 #      CACHE STRING "")
 #endif()
-
 #include("cmake/HunterGate.cmake")
 #HunterGate(
 #    URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
@@ -15,10 +14,12 @@ set( CMAKE_TOOLCHAIN_FILE
 
 cmake_minimum_required (VERSION 3.18)
 project(stelar3D)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(noinsourcebuilds)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(BUILD_SHARED_LIBS OFF)
 
 #list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/autovcpkg)
 #include(AutoVcpkg)
@@ -46,5 +47,10 @@ find_package(assimp CONFIG REQUIRED)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT IPOsupported OUTPUT IPOerror)
+if(IPOsupported)
+  message(STATUS "IPO / LTO enabled")
+else()
+  message(STATUS "IPO / LTO not supported: <${IPOerror}>")
+endif()
 
 add_subdirectory(src)

@@ -1,14 +1,9 @@
-if(IPOsupported)
-    message(STATUS "IPO / LTO enabled")
-else()
-	message(STATUS "IPO / LTO not supported: <${IPOerror}>")
-endif()
 function(binFromSrcList)
 	foreach(tutorial ${ARGV})
 		set(fname "${tutorial}.cpp")
 		add_executable(${tutorial} ${fname})
 		target_include_directories(${tutorial} PRIVATE ${CMAKE_SOURCE_DIR}/src)
-		target_link_libraries(${tutorial} PRIVATE assimp stelar3D)
+		target_link_libraries(${tutorial} PRIVATE assimp::assimp stelar3D)
 		target_compile_options(${tutorial} PRIVATE
 		                       #$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
 		                       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic>

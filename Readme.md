@@ -19,6 +19,8 @@ git submodule update --remote
 
 Windows:
 ```
+cmake --build .  --config Debug -j 12
+
 .\vcpkg\bootstrap-vcpkg.bat
 .\vcpkg\vcpkg.exe install sdl2:x64-windows
 .\vcpkg\vcpkg.exe install glad:x64-windows

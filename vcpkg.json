@@ -1,8 +1,22 @@
 { 
 	"name" : "stelar3d",
 	"description": [ "modern(non fixed pipeline) OpenGL 3D graphics toy code to experiment with 3D graphics.",
-                         "Using glad, SDL2, glm, soil2, assimp libraries"
+		"Using glad, SDL2, glm, soil2, assimp libraries"
 	],
 	"version-string": "0.0",
-	"dependencies": [ "assimp" ]
+	"dependencies": [
+		{
+			"name": "sdl2",
+			"platform": "windows"
+		},
+		{
+			"name": "sdl2",
+			"default-features": false,
+			"features": [
+				"x11"
+			],
+			"platform": "!windows"
+		},
+		"assimp"
+	]
 }

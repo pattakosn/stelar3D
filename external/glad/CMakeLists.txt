@@ -1,6 +1,9 @@
-add_library(glad SHARED "src/glad.c")
+add_library(glad STATIC "src/glad.c")
 target_include_directories(glad PUBLIC "include")
-
+add_library(glad::glad ALIAS glad)
+if(IPOsupported)
+    set_property(TARGET glad PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
 # following options found in glad2's CMakeLists.txt in its github repository
 target_link_libraries(glad PUBLIC ${CMAKE_DL_LIBS})
 # if(GG_SHARED)
