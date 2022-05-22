@@ -1,41 +1,31 @@
 {
-    "version": 2,
+    "version": 3,
     "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 20,
-      "patch": 0
+        "major": 3,
+        "minor": 15,
+        "patch": 0
     },
     "configurePresets": [
         {
-            "name": "unix",
+            "name": "default",
             "displayName": "Default Config",
-            "description": "Default build using Make and vcpkg",
-            "generator": "Unix Makefiles",
-            "binaryDir": "${sourceDir}/build",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-            }
-        },
-            {
-            "name": "msvc",
-            "displayName": "Default MSVC",
-            "description": "Default build using Visual Studio and vcpkg",
-            "generator": "Visual Studio 16 2019",
-            "binaryDir": "${sourceDir}/build",
-            "cacheVariables": {
-            "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-            } 
-        },
+            "description": "Default configure using 'Visual Studio 17 2022' generator",
+            "generator": "Visual Studio 17 2022",
+            "cacheVariables": {},
+            "toolchainFile": "D:\\github.com\\stelar3D\\conan_toolchain.cmake",
+            "binaryDir": null
+        }
+    ],
+    "buildPresets": [
         {
-            "name": "mingw",
-            "displayName": "Default MinGW",
-            "description": "Default build using MinGW and vcpkg",
-            "generator": "MinGW Makefiles",
-            "binaryDir": "${sourceDir}/build",
-            "cacheVariables": {
-            "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-            } 
-        }   
+            "name": "default",
+            "configurePreset": "default"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        }
     ]
 }

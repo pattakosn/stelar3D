@@ -39,6 +39,7 @@ ogl_context::~ogl_context()
 
 ogl_context::ogl_context(const std::string win_title, const int w, const int h, const bool full_screen) : width{w}, height{h}
 {
+        //SDL_SetMainReady();
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) //SDL_INIT_EVERYTHING
 		sdl_die("SDL: init failed");

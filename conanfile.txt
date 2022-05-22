@@ -1,0 +1,7 @@
+[requires]
+sdl/2.0.20
+assimp/5.2.2
+
+[generators]
+cmake_find_package_multi
+

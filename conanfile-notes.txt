@@ -1,0 +1,15 @@
+[requires]
+sdl/2.0.20
+assimp/5.2.2
+
+[generators]
+cmake_find_package_multi
+cmake_find_package
+msbuild
+CMakeDeps
+CMakeToolchain
+
+[options]
+
+[imports]
+./res/bindings, imgui_impl_glfw.cpp -> ../bindings

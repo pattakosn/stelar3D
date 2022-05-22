@@ -4,8 +4,6 @@
 #include "mesh_item.h"
 //#include "texture.h"
 #include <assimp/scene.h>
-#include <assimp/Logger.hpp>
-#include <assimp/DefaultLogger.hpp>
 #include <string>
 #include <vector>
 using std::string, std::vector;
@@ -15,16 +13,7 @@ class model
 public:
     // constructor, expects a filepath to a 3D model.
     //explicit model(string const &path, bool flipped_textures = true, bool gamma = false) : gammaCorrection(gamma) {
-    explicit model(string const &path, bool flipped_textures = true) {
-        //Assimp::DefaultLogger::create(string(path + "log.txt").c_str(), Assimp::Logger::VERBOSE);
-        Assimp::DefaultLogger::create("", Assimp::Logger::VERBOSE);
-        Assimp::LogStream* stderrStream = Assimp::LogStream::createDefaultStream(aiDefaultLogStream_STDERR);
-        Assimp::DefaultLogger::get()->attachStream(stderrStream, Assimp::Logger::NORMAL | Assimp::Logger::Debugging | Assimp::Logger::VERBOSE);
-
-        load_model(path, flipped_textures);
-
-        Assimp::DefaultLogger::kill();
-    }
+    explicit model(string const &path, bool flipped_textures = true);
 
     // draw model ie all its meshes
     void draw(Shader &shader) {

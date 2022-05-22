@@ -16,6 +16,9 @@ target_compile_options(stelar3D PUBLIC
                    #$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
                    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic>
 )
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(stelar3D PUBLIC OpenMP::OpenMP_CXX)
+endif()
 if(IPOsupported)
     set_property(TARGET stelar3D PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()

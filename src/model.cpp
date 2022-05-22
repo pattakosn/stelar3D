@@ -1,14 +1,25 @@
 #include "model.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <assimp/Logger.hpp>
+#include <assimp/DefaultLogger.hpp>
 #include "stb_image.h" //TODO DELETE WHEN NO LONGER USING Texture
 
 using std::cout, std::endl;
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
 
+model::model(string const &path, bool flipped_textures) {
+        load_model(path, flipped_textures);
+}
+
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 void model::load_model(string const &path, const bool flipped_textures) {
-    // read file via ASSIMP
+        //Assimp::DefaultLogger::create(string(path + "log.txt").c_str(), Assimp::Logger::VERBOSE);
+        Assimp::DefaultLogger::create("", Assimp::Logger::VERBOSE);
+        Assimp::LogStream* stderrStream = Assimp::LogStream::createDefaultStream(aiDefaultLogStream_STDERR);
+        Assimp::DefaultLogger::get()->attachStream(stderrStream, Assimp::Logger::NORMAL | Assimp::Logger::Debugging | Assimp::Logger::VERBOSE);
+
+        // read file via ASSIMP
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     // check for errors
@@ -21,6 +32,7 @@ void model::load_model(string const &path, const bool flipped_textures) {
 
     // process ASSIMP's root node recursively
     process_node(scene->mRootNode, scene, flipped_textures);
+        Assimp::DefaultLogger::kill();
 }
 
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).

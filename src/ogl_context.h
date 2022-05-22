@@ -1,5 +1,6 @@
 #pragma once
 #include "glad/glad.h"
+//#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <string>
 #include "ogl_debug.h"

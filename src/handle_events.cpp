@@ -4,6 +4,7 @@
 void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context) {
 	SDL_Event event;
 	static bool wireframe = false;
+	static bool depthTest = false;
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_KEYDOWN:
@@ -44,6 +45,15 @@ void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context) {
 						} else {
 							glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 							wireframe  = true;
+						}
+						break;
+					case SDLK_p:
+						if ( depthTest ) {
+							glDepthFunc(GL_LESS);
+							depthTest = false;
+						} else {
+							glDepthFunc(GL_ALWAYS);
+							depthTest = true;
 						}
 						break;
 				}
