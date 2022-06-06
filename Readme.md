@@ -67,7 +67,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
  * normal maps
  * bump maps
  * reflection maps
-
+ * shadow volumes (stencil buffer technique for real-time shadoes)
 ### Phong (in fragment shaders - Gouraud when in vertex shders)
  * Ambient lighting
  * Diffuse lighting

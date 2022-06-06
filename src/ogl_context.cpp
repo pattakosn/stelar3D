@@ -60,6 +60,9 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
+        //Request a stencil buffer of at least 1bit per pixel
+        SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 1 );
+
 	// Create the window
 	if (full_screen)
 		window = SDL_CreateWindow(win_title.c_str(),
