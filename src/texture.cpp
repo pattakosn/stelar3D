@@ -56,7 +56,7 @@ void texture::load_image(const std::string& fname, bool flipped,
             std::cerr << "how is it possible to have " << nrChannels << " channels in " << fname.c_str() <<"?\n";
             std::abort();
         }
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         std::cout << "Failed to load texture: " << fname.c_str() << std::endl;

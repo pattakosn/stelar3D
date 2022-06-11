@@ -34,10 +34,10 @@ int main(int, char *[])
         attributes_binding_object planeCMDs;
         planeCMDs.bind();
         vertex_array planeDAT;
-        planeDAT.add_buffer(planeVertices, sizeof(planeVertices));
+        planeDAT.add_buffer(plane_vertices, sizeof(plane_vertices));
         planeCMDs.add_attribute_floats_array(0, 3, 5, 0);
         planeCMDs.add_attribute_floats_array(1, 2, 5, 3);
-        vertex_array::unbind();
+        attributes_binding_object::unbind();
 
         texture marbleTexture("../assets/marble.jpg");
         texture floorTexture("../assets/metal.png");
