@@ -4,5 +4,6 @@ set(03-advanced
 	13-02-blending
 	13-03-blending-sorted
 	13-04-framebuffer
+	13-05-framebuffer-post_processing
 )
 binFromSrcList(${03-advanced})
