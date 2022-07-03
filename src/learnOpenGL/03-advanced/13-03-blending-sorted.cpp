@@ -67,7 +67,6 @@ int main(int, char *[])
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // sort the transparent windows before rendering
-                // ---------------------------------------------
                 std::map<float, glm::vec3> sorted;
                 for (unsigned int i = 0; i < windows.size(); i++) {
                         float distance = glm::length(my_cam.Position - windows[i]);

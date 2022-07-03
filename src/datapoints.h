@@ -157,6 +157,18 @@ float transparent_vertices[] = {
         1.0f,  0.5f,  0.0f,  1.0f,  0.0f
 };
 
+// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+float quad_vertices[] = {
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
+        1.0f,  1.0f,  1.0f, 1.0f
+};
+
 glm::vec3 cube_random_positions[] = {
     glm::vec3(0.0f, 0.0f, 0.0f),
     glm::vec3(2.0f, 5.0f, -15.0f),

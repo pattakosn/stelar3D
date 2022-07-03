@@ -3,5 +3,6 @@ set(03-advanced
 	13-01-stencil
 	13-02-blending
 	13-03-blending-sorted
+	13-04-framebuffer
 )
 binFromSrcList(${03-advanced})
