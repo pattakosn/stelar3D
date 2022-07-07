@@ -42,7 +42,7 @@ int main(int, char*[])
         mirror_quadCMDs.add_attribute_floats_array(1, 2, 4, 2);
 
         // load textures
-        texture cubeTexture("../assets/mariaKids.jpg");//wooden_container.jpg");
+        texture cubeTexture("../assets/extra/mariaKids.jpg");//wooden_container.jpg");
         texture floorTexture("../assets/metal.png");
 
         // shader configuration

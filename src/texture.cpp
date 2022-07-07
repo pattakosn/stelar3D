@@ -57,8 +57,9 @@ void texture::load_image(const std::string& fname, bool flipped,
             std::abort();
         }
         std::cout << "Loading texture: " << fname.c_str() << " of size: " << width << "x" << height << " of " << nrChannels << std::endl;
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         std::cout << "Failed to load texture: " << fname.c_str() << std::endl;
