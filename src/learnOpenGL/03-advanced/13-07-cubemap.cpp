@@ -15,9 +15,7 @@ int main(int, char*[])
 
         // build and compile shaders
         Shader shader("../shaders/P-MVP-1T.vert", "../shaders/1T-apply.frag");
-        //Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_inversed.frag");
-        //Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_greyscaled.frag");
-        Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_greyscaledWeighted.frag");
+        Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_kernel.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // cube VAO
@@ -43,7 +41,7 @@ int main(int, char*[])
         mirror_quadCMDs.add_attribute_floats_array(1, 2, 4, 2);
 
         // load textures
-        texture cubeTexture("../assets/extra/mariaKids.jpg");//wooden_container.jpg");
+        texture cubeTexture("../assets/wooden_container.jpg");//extra/mariaKids.jpg");
         texture floorTexture("../assets/metal.png");
 
         // shader configuration

@@ -37,7 +37,8 @@ void texture::bind() {
 void texture::load_image(const std::string& fname, bool flipped,
                          int s_wrap, int t_wrap, int min_filter, int mag_filter) {
     bind();
-    wrap_parameters(s_wrap, t_wrap, min_filter, mag_filter);
+    wrap_parameters(s_wrap, t_wrap);
+    filtering_parameters(min_filter, mag_filter);
 
     stbi_set_flip_vertically_on_load(flipped);
 
@@ -68,14 +69,14 @@ void texture::load_image(const std::string& fname, bool flipped,
     assert(glIsTexture(tex) && "This is not a texture...");
 }
 
-void texture::wrap_parameters (int s_wrap, int t_wrap, int min_filter, int mag_filter) {
-    // set the texture wrapping parameters
+void texture::wrap_parameters (int s_wrap, int t_wrap) const {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s_wrap);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t_wrap);
+}
 
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+void texture::filtering_parameters (int min_filter, int mag_filter) const {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 }
 
 void texture::activate (int text_num) {

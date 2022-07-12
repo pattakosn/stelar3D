@@ -10,6 +10,8 @@ add_library(stelar3D
     datapoints.h
     mesh_item.cpp mesh_item.h
     model.cpp model.h
+    frame_buffer.cpp frame_buffer.h
+    render_buffer.cpp render_buffer.h
 )
 target_link_libraries(stelar3D PUBLIC glm::glm SDL2::SDL2 SDL2::SDL2main glad::glad)
 target_compile_options(stelar3D PUBLIC

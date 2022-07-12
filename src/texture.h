@@ -24,10 +24,12 @@ public:
     void activate (int text_num);
 
     // wrapping: GL_REPEAT (default wrapping method), GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+    void wrap_parameters (int s_wrap = GL_REPEAT, int t_wrap = GL_REPEAT) const;
     // filtering: GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR
-    void wrap_parameters (int s_wrap = GL_REPEAT, int t_wrap = GL_REPEAT, int min_filter = GL_LINEAR, int mag_filter = GL_LINEAR);
+    void filtering_parameters (int min_filter = GL_LINEAR, int mag_filter = GL_LINEAR) const;
     void load_image(const std::string& fname, bool flipped = false,
                     int s_wrap = GL_REPEAT, int t_wrap = GL_REPEAT, int min_filter = GL_LINEAR, int mag_filter = GL_LINEAR);
+    GLuint get() { return tex; };
 private:
     GLuint tex = 0UL;
 };
