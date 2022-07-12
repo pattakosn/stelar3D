@@ -2,12 +2,15 @@
 #define TEXTURE_H
 #include <glad/glad.h>
 #include <string>
+#include <vector>
 
 class texture {
 public:
     //std::string type; //NIKOS TODO how should i handle these?
     //std::string path;
     texture();
+    explicit texture(std::string fname, bool flipped = false);
+    explicit texture(std::vector<std::string>& faces);
 
     texture(const texture &) = delete;
     texture& operator=(const texture &) = delete;
@@ -15,18 +18,17 @@ public:
     texture(texture&& other) noexcept;
     texture& operator=(texture&& other);
 
-    explicit texture(std::string fname, bool flipped = false);
     ~texture();
 
-    void bind();
+    void bind(GLenum target = GL_TEXTURE_2D);
 
     // text_num ie GL_TEXTURE0, ...
     void activate (int text_num);
 
     // wrapping: GL_REPEAT (default wrapping method), GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
-    void wrap_parameters (int s_wrap = GL_REPEAT, int t_wrap = GL_REPEAT) const;
+    void wrap_parameters (GLint s_wrap = GL_REPEAT, GLint t_wrap = GL_REPEAT) const;
     // filtering: GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR
-    void filtering_parameters (int min_filter = GL_LINEAR, int mag_filter = GL_LINEAR) const;
+    void filtering_parameters (GLint min_filter = GL_LINEAR, GLint mag_filter = GL_LINEAR) const;
     void load_image(const std::string& fname, bool flipped = false,
                     int s_wrap = GL_REPEAT, int t_wrap = GL_REPEAT, int min_filter = GL_LINEAR, int mag_filter = GL_LINEAR);
     GLuint get() { return tex; };
