@@ -20,7 +20,7 @@ public:
 
     ~texture();
 
-    void bind(GLenum target = GL_TEXTURE_2D);
+    void bind();
 
     // text_num ie GL_TEXTURE0, ...
     void activate (int text_num);
@@ -34,5 +34,6 @@ public:
     GLuint get() { return tex; };
 private:
     GLuint tex = 0UL;
+    GLenum target = 0; // for now it should be: GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP. in the future i do not know
 };
 #endif

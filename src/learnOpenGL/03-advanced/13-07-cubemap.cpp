@@ -78,7 +78,8 @@ int main(int, char*[])
                 glDrawArrays(GL_TRIANGLES, 0, 36);
 
                 // draw skybox as last
-                glDepthFunc(GL_LEQUAL); // change depth function so depth test passes when values are equal to depth buffer's content
+                // change depth function so depth test passes when values are equal to depth buffer's content
+                glDepthFunc(GL_LEQUAL);
                 skyboxShader.use();
                 view = glm::mat4(glm::mat3(my_cam.GetViewMatrix())); // remove translation from the view matrix
                 skyboxShader.setMat4("view", view);
@@ -86,7 +87,7 @@ int main(int, char*[])
                 // skybox cube
                 skyboxCMDs.bind();
                 cubemapTexture.activate(GL_TEXTURE0);
-                cubemapTexture.bind(GL_TEXTURE_CUBE_MAP);
+                cubemapTexture.bind();
                 glDrawArrays(GL_TRIANGLES, 0, 36);
                 attributes_binding_object::unbind();
                 glDepthFunc(GL_LESS); // set depth function back to default

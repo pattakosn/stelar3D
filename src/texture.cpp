@@ -8,6 +8,7 @@ texture::texture() {
 }
 
 texture::texture(const std::string fname, bool flipped) : texture() {
+    target = GL_TEXTURE_2D;
     load_image(fname, flipped);
 }
 
@@ -16,7 +17,8 @@ texture::texture(const std::string fname, bool flipped) : texture() {
 // +Y (top)   / -Y (bottom)
 // +Z (front) / -Z (back)
 texture::texture(std::vector<std::string>& faces) : texture() {
-        glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+        target = GL_TEXTURE_CUBE_MAP;
+        bind();
 
         int width, height, nrChannels;
         for (unsigned int i = 0; i < faces.size(); i++) {
@@ -29,12 +31,12 @@ texture::texture(std::vector<std::string>& faces) : texture() {
                 stbi_image_free(data);
         }
         // filtering_parameters(GL_TEXTURE_CUBE_MAP);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // wrap_parameters(GL_TEXTURE_CUBE_MAP);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
 texture::texture(texture &&other) noexcept: tex(other.tex) { //, type(other.type), path(other.path) {
@@ -54,7 +56,7 @@ texture::~texture() {
     glBindTexture(GL_TEXTURE_2D, 0); // better to now unbind current tex object
 }
 
-void texture::bind(GLenum target) {
+void texture::bind() {
     assert(tex && "texture id is zero");
     glBindTexture(target, tex);
     assert(glIsTexture(tex) && "This is not a texture..."); // attention: glIsTexture driver implementations may not conform to spec description, so we check AFTER binding
