@@ -8,5 +8,6 @@ set(03-advanced
 	13-06-framebuffer-post_processing_kernel
 	13-07-cubemap
 	13-08-cubemap-reflection_refraction
+	13-09-uniform_buffer_objects
 )
 binFromSrcList(${03-advanced})
