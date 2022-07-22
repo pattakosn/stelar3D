@@ -7,8 +7,8 @@ using these dependencies:
 * ~ [GLAD](https://github.com/Dav1dde/glad) ~
 * ~ [GLM](https://github.com/g-truc/glm) ~
 * ~ [Soil2](https://github.com/SpartanJ/soil2) ~
-using vcpkg package manager to automate installation of these.
-vcpkg does not really work for me on windows+gcc/clang. soil2 i do not need for now so i am no longer including it. I also include a hard copy of glaf and glm to make my life easier.
+using the vcpkg package manager to automate installation of these.
+vcpkg does not really work for me on windows+gcc/clang. soil2 i do not need for now so i am no longer including it. I also include a hard copy of glad and glm to make my life easier.
 
 ```
 git checkout --recurse-submodules
@@ -71,7 +71,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
  * post processing filter
    - Gaussian BLur
 
-### Phong (in fragment shaders - Gouraud when in vertex shders)
+### Phong (in fragment shaders - Gouraud when in vertex shaders)
  * Ambient lighting
  * Diffuse lighting
  * Specular lighting
@@ -96,7 +96,7 @@ Lovelace AD102 RTX 5000
 
 ## AMD ATI
 * RX 6000
-                | Navi 24 | Navi 23 | Navi 22 | Navi 21
+                | Navi 24    | Navi 23          | Navi 22       | Navi 21
 Codename        | Beige Goby | Dimgrey Cavefish | Navy Flounder | Sienna Cichlid ("big navi" )
 Models          | RX 6400, 6500XT | RX 6600, 6600XT | RX 6700XT | RX 6800/XT 6900XT
  | 1 raster engine, 16 shader cluster, 1024 FP32, 
