@@ -58,6 +58,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
 [SketchFab](https://sketchfab.com/)
 [SO OpenGL documentation](https://sodocumentation.net/opengl)
 [Khronos common opengl mistakes](https://www.khronos.org/opengl/wiki/Common_Mistakes)
+[apitrace and references to other 3D profiling tools](https://apitrace.github.io/)
 
 ## 3D graphics techniques list
  * lighting maps

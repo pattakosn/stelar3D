@@ -32,4 +32,11 @@ if(IPOsupported)
     set_property(TARGET get_all_GLextensions PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
+#add_executable(imgui-demo my-imgui-demo.cpp)
+#target_link_libraries(imgui-demo imgui SDL2::SDL2 SDL2::SDL2main glad)
+#set_target_properties(imgui-demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+#if(IPOsupported)
+#    set_property(TARGET imgui-demo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+#endif()
+
 add_subdirectory(learnOpenGL)

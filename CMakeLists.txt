@@ -1,7 +1,7 @@
-set( CMAKE_TOOLCHAIN_FILE
-     ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
-     CACHE STRING "Vcpkg toolchain file"
-)
+##NIKOS TEST set( CMAKE_TOOLCHAIN_FILE
+##NIKOS TEST      ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+##NIKOS TEST      CACHE STRING "Vcpkg toolchain file"
+##NIKOS TEST )
 #if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
 #  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 #      CACHE STRING "")
@@ -17,8 +17,6 @@ project(stelar3D)
 #list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 #list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-#CONAN_TEST include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-#CONAN_TEST conan_basic_setup()
 
 include(noinsourcebuilds)
 
@@ -42,6 +40,7 @@ endif()
 
 add_subdirectory(external/glm)
 add_subdirectory(external/glad)
+#add_subdirectory(external/imgui)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 find_package(OpenMP)
