@@ -11,6 +11,7 @@ using the vcpkg package manager to automate installation of these.
 vcpkg does not really work for me on windows+gcc/clang. soil2 i do not need for now so i am no longer including it. I also include a hard copy of glad and glm to make my life easier.
 
 ```
+git clone git@github.com:pattakosn/stelar3D.git --recurse-submodules
 git checkout --recurse-submodules
 git submodule init
 git submodule update
