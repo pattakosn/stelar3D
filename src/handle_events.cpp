@@ -6,6 +6,7 @@ void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context) {
 	static bool wireframe = false;
 	static bool depthTest = false;
 	while (SDL_PollEvent(&event)) {
+        ImGui_ImplSDL2_ProcessEvent(&event);
 		switch (event.type) {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {

@@ -6,6 +6,7 @@
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "texture.h"
+#include "win_cam_pos_fps.h"
 
 int main(int, char*[])
 {
@@ -52,6 +53,8 @@ int main(int, char*[])
 
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
 
+        win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
+
         bool quit = false;
         while(!quit) {
                 // make sure we clear the framebuffer's content
@@ -92,6 +95,8 @@ int main(int, char*[])
                 glDrawArrays(GL_TRIANGLES, 0, 36);
                 attributes_binding_object::unbind();
                 glDepthFunc(GL_LESS); // set depth function back to default
+
+                win_cam_pos_fps(my_cam);
 
                 my_context.swap();
                 handle_events(quit, my_cam, my_context);

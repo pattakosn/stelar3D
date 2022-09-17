@@ -6,16 +6,9 @@
 #  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 #      CACHE STRING "")
 #endif()
-#include("cmake/HunterGate.cmake")
-#HunterGate(
-#    URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
-#    SHA1 "3319fe6a3b08090df7df98dee75134d68e2ef5a3"
-#)
 
 cmake_minimum_required (VERSION 3.22.2 FATAL_ERROR)
 project(stelar3D)
-#list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
-#list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(noinsourcebuilds)
@@ -30,13 +23,8 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
-#cmake_policy(SET CMP0012 NEW)
-#cmake_policy(SET CMP0111 NEW)
 SET(CMAKE_POLICY_DEFAULT_CMP0012 NEW)
 SET(CMAKE_POLICY_DEFAULT_CMP0111 NEW)
-
-#hunter_add_package(SDL2)
-#hunter_add_package(assimp)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
@@ -44,12 +32,11 @@ endif()
 
 add_subdirectory(external/glm)
 add_subdirectory(external/glad)
-#add_subdirectory(external/imgui)
-find_package(SDL2 CONFIG REQUIRED)
-find_package(assimp CONFIG REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(assimp REQUIRED)
 set_target_properties(assimp::assimp PROPERTIES MAP_IMPORTED_CONFIG_DEBUG Release)
 find_package(OpenMP)
-#find_package(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
 #add_definitions(${OPENGL_DEFINITIONS})
 #find_package(X11 REQUIRED)
 #set(LIBS ${LIBS} X11 Xrandr Xinerama Xi Xxf86vm Xcursor GL dl pthread  stelar3D PARENT_SCOPE)
@@ -59,12 +46,33 @@ find_package(OpenMP)
 #example to handle shader/assets/libs maybe?     COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/assets/simple-shader.fs ${PROJECT_BINARY_DIR}
 #example to handle shader/assets/libs maybe? )
 
+add_library(imgui
+        # Main Imgui files
+        external/imgui/imgui.cpp
+        external/imgui/imgui_draw.cpp
+        external/imgui/imgui_tables.cpp
+        external/imgui/imgui_widgets.cpp
+        external/imgui/imgui_demo.cpp
+        # SDL2+OpenGL-specific files
+        external/imgui/backends/imgui_impl_sdl.cpp
+        external/imgui/backends/imgui_impl_opengl3.cpp)
+add_library(imgui::imgui ALIAS imgui)
+target_link_libraries(imgui PUBLIC OpenGL::GL SDL2::SDL2)
+target_include_directories(imgui PUBLIC external/imgui/ external/imgui/backends/)
+
 include(CheckIPOSupported)
 check_ipo_supported(RESULT IPOsupported OUTPUT IPOerror)
 if(IPOsupported)
   message(STATUS "IPO / LTO enabled")
 else()
   message(STATUS "IPO / LTO not supported: <${IPOerror}>")
+endif()
+
+add_executable(imgui-example external/imgui/examples/example_sdl_opengl3/main.cpp)
+target_link_libraries(imgui-example imgui)
+set_target_properties(imgui-example PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+if(IPOsupported)
+    set_property(TARGET imgui-example PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
 add_subdirectory(src)

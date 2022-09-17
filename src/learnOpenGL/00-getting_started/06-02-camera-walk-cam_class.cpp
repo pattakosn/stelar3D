@@ -7,6 +7,7 @@
 #include "vertex_array.h"
 #include "texture.h"
 #include "datapoints.h"
+#include "win_cam_pos_fps.h"
 
 int main(int, char *[]) {
     ogl_context my_context;
@@ -35,6 +36,7 @@ int main(int, char *[]) {
     my_shader.setInt("texture1", 1); // or with shader class
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     bool quit = false;
+    win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
     while (!quit) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         my_shader.use();
@@ -63,8 +65,10 @@ int main(int, char *[]) {
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-        my_context.swap();
 
+        win_cam_pos_fps(my_cam);
+
+        my_context.swap();
         handle_events(quit, my_cam, my_context);
     }
     return EXIT_SUCCESS;

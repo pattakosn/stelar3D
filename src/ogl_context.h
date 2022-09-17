@@ -1,7 +1,10 @@
 #pragma once
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
 #include "glad/glad.h"
 //#define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <string>
 #include "ogl_debug.h"
 #include <memory>
@@ -20,15 +23,17 @@ public:
 	float dt() const { return dt_; };
 	int screen_width() const { return width; };
 	int screen_height() const { return height; };
+	ImGuiIO* io;
+
 private:
 	int width;
 	int height;
 
 	SDL_Window* window = nullptr;
-	SDL_Renderer* renderer = nullptr;
+//	SDL_Renderer* renderer = nullptr;
 	SDL_GLContext gl_context;
 
-    std::unique_ptr<ogl_debug> dbg;
+	std::unique_ptr<ogl_debug> dbg;
 
 	Uint32 tick_last = 0;
 	Uint32 timeS = 0;

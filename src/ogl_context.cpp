@@ -30,26 +30,30 @@ ogl_context::~ogl_context()
 {
     dbg.reset();
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
     /* Delete our opengl context, destroy our window, and shutdown SDL */
     SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyRenderer(renderer);
+//    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     // this is called by atexit(): SDL_Quit();
 }
 
 ogl_context::ogl_context(const std::string win_title, const int w, const int h, const bool full_screen) : width{w}, height{h}
 {
-        //SDL_SetMainReady();
+	//SDL_SetMainReady();
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) //SDL_INIT_EVERYTHING
 		sdl_die("SDL: init failed");
 	atexit (SDL_Quit);
 
-    // I do not know what this does || if it is required but it seems to not harm anything
-    if (SDL_GL_LoadLibrary(nullptr)!=0 ) {
+	// I do not know what this does || if it is required but it seems to not harm anything
+	if (SDL_GL_LoadLibrary(nullptr)!=0 ) {
 		checkSDLError(__LINE__);
 		sdl_die("SDL: GL Load Library failed");
-    }
+	}
 
 	// Request an OpenGL 4.5 context (should be core)
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -60,8 +64,8 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
-        //Request a stencil buffer of at least 1bit per pixel
-        SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 1 );
+	//Request a stencil buffer of at least 1bit per pixel
+	SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 1 );
 
 	// Create the window
 	if (full_screen)
@@ -78,26 +82,43 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 		sdl_die("SDL: CreateWindow failed");
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr) {
-        checkSDLError(__LINE__);
-		sdl_die("SDL2: renderer created failed");
-    }
+//	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+//	if (renderer == nullptr) {
+//        checkSDLError(__LINE__);
+//		sdl_die("SDL2: renderer created failed");
+//    }
 
 	gl_context = SDL_GL_CreateContext(window);
 	if (gl_context == nullptr) {
 		checkSDLError(__LINE__);
 	    sdl_die("SDL: OpenGL context creation failed");
 	}
+	SDL_GL_MakeCurrent(window, gl_context);
+	// Enable vsync
+	SDL_GL_SetSwapInterval(1);
 
 	// Load GL extensions using glad
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
-        std::cerr << "GLAD: Failed to initialize OpenGL context." << std::endl;
-        exit(1);
-    }
+	if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
+		std::cerr << "GLAD: Failed to initialize OpenGL context." << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
-	// Use v-sync
-	SDL_GL_SetSwapInterval(1);
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	io = &ImGui::GetIO();
+	(void)*io;
+	io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
+	ImGui_ImplOpenGL3_Init(NULL);
+
 	// Disable depth test and face culling.
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -111,9 +132,9 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 	SDL_WarpMouseInWindow(window, width / 2, height / 2);
 
 	timeS = SDL_GetTicks();
-    info();
+	info();
 
-    dbg = std::make_unique<ogl_debug>();
+	dbg = std::make_unique<ogl_debug>();
 }
 
 void ogl_context::info( )
@@ -121,10 +142,10 @@ void ogl_context::info( )
 	int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 
-    std::cout << "[ app  ] OpenGL loaded\n";
+	std::cout << "[ app  ] OpenGL loaded\n";
 	// Loaded OpenGL successfully.
-    std::cout << "[OpenGL] OpenGL version loaded: " << GLVersion.major << "." << GLVersion.minor << std::endl;
-    std::cout << "[OpenGL] Vendor: " << glGetString(GL_VENDOR) << "\n";
+	std::cout << "[OpenGL] OpenGL version loaded: " << GLVersion.major << "." << GLVersion.minor << std::endl;
+	std::cout << "[OpenGL] Vendor: " << glGetString(GL_VENDOR) << "\n";
 	std::cout << "[OpenGL] Renderer: " << glGetString(GL_RENDERER) << "\n";
 	std::cout << "[OpenGL] Version: " << glGetString(GL_VERSION) << "\n";
 	std::cout << "[OpenGL] Version GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
