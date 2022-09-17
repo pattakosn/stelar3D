@@ -50,7 +50,6 @@ int main(int, char*[])
         skyboxShader.use();
         skyboxShader.setInt("skybox", 0);
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
 
         bool quit = false;

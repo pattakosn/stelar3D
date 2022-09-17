@@ -56,7 +56,6 @@ int main(int, char*[])
         fbo.initialize(my_context.screen_width(), my_context.screen_height());
         frame_buffer::unbind();
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
 
         bool quit = false;

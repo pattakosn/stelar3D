@@ -50,7 +50,6 @@ int main(int, char*[])
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
 
         bool quit = false;

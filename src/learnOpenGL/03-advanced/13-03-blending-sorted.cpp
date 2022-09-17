@@ -48,17 +48,16 @@ int main(int, char *[])
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         std::vector<glm::vec3> windows;
-        windows.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
-        windows.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
-        windows.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
-        windows.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
-        windows.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
+        windows.emplace_back(-1.5f, 0.0f, -0.48f);
+        windows.emplace_back(1.5f, 0.0f, 0.51f);
+        windows.emplace_back(0.0f, 0.0f, 0.7f);
+        windows.emplace_back(-0.3f, 0.0f, -2.3f);
+        windows.emplace_back(0.5f, 0.0f, -0.6f);
 
         // shader configuration
         shader.use();
         shader.setInt("texture1", 0);
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam my_cam(glm::vec3(0.f, 1.f, 3.f));
 
         bool quit = false;
@@ -68,9 +67,9 @@ int main(int, char *[])
 
                 // sort the transparent windows before rendering
                 std::map<float, glm::vec3> sorted;
-                for (unsigned int i = 0; i < windows.size(); i++) {
-                        float distance = glm::length(my_cam.Position - windows[i]);
-                        sorted[distance] = windows[i];
+                for (auto & win : windows) {
+                        float distance = glm::length(my_cam.Position - win);
+                        sorted[distance] = win;
                 }
 
                 shader.use();
@@ -98,7 +97,7 @@ int main(int, char *[])
                 // windows (from furthest to nearest)
                 transparentCMDs.bind();
                 window.activate(GL_TEXTURE0);
-                for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it) {
+                for (auto it = sorted.rbegin(); it != sorted.rend(); ++it) {
                         model = glm::mat4(1.0f);
                         model = glm::translate(model, it->second);
                         shader.setMat4("model", model);
