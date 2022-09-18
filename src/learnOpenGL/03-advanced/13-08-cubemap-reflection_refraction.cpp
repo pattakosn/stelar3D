@@ -96,7 +96,7 @@ int main(int, char*[])
                 attributes_binding_object::unbind();
                 glDepthFunc(GL_LESS); // set depth function back to default
 
-                win_cam_pos_fps(my_cam);
+                win_cam_pos_fps(my_cam, my_context);
 
                 my_context.swap();
                 handle_events(quit, my_cam, my_context);

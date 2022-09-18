@@ -1,6 +1,7 @@
 #pragma once
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "imgui_impl_opengl3.h"
 #include "glad/glad.h"
 //#define SDL_MAIN_HANDLED
@@ -23,6 +24,7 @@ public:
 	float dt() const { return dt_; };
 	int screen_width() const { return width; };
 	int screen_height() const { return height; };
+    SDL_Window* get_win() const {return window; };
 	ImGuiIO* io;
 
 private:
