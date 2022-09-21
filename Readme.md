@@ -76,6 +76,8 @@ sudo dnf install libXi-devel libXxf86vm-devel
    - Gaussian BLur
  * Super Sample Anti-Aliasing (SSAA) - render in bigger resolution and downsample to final resolution
  * MultiSample Anti-Aliasing (MSAA)
+ * [OpenGL Direct State Access](https://www.khronos.org/opengl/wiki/Direct_State_Access)
+ * (nvidia?) opengl command lists
 
 ### Phong (in fragment shaders - Gouraud when in vertex shaders)
  * Ambient lighting
