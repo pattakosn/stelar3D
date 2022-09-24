@@ -66,7 +66,7 @@ int main(int, char *[]) {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        win_cam_pos_fps(my_cam);
+        win_cam_pos_fps(my_cam, my_context);
 
         my_context.swap();
         handle_events(quit, my_cam, my_context);

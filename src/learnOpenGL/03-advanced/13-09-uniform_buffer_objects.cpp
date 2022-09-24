@@ -5,6 +5,7 @@
 #include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
+#include "win_cam_pos_fps.h"
 
 int main(int, char*[])
 {
@@ -51,6 +52,7 @@ int main(int, char*[])
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+        win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
 
         bool quit = false;
         while (!quit) {
@@ -89,6 +91,8 @@ int main(int, char*[])
                 model = glm::translate(model, glm::vec3(0.75f, -0.75f, 0.0f)); // move bottom-right
                 shaderBlue.setMat4("model", model);
                 glDrawArrays(GL_TRIANGLES, 0, 36);
+
+                win_cam_pos_fps(my_cam, my_context);
 
                 my_context.swap();
                 handle_events(quit, my_cam, my_context);
