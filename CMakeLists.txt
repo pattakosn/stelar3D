@@ -11,7 +11,7 @@ cmake_minimum_required (VERSION 3.22.2 FATAL_ERROR)
 project(stelar3D)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include(noinsourcebuilds)
+include(NoInSourceBuilds)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(BUILD_SHARED_LIBS OFF)
@@ -59,6 +59,7 @@ add_library(imgui
 add_library(imgui::imgui ALIAS imgui)
 target_link_libraries(imgui PUBLIC OpenGL::GL SDL2::SDL2)
 target_include_directories(imgui PUBLIC external/imgui/ external/imgui/backends/)
+target_compile_definitions(imgui PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT IPOsupported OUTPUT IPOerror)
