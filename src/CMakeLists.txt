@@ -13,6 +13,7 @@ add_library(stelar3D
     frame_buffer.cpp frame_buffer.h
     render_buffer.cpp render_buffer.h
     win_cam_pos_fps.cpp win_cam_pos_fps.h
+    shader.cpp shader.h
 )
 target_link_libraries(stelar3D PUBLIC imgui::imgui glm::glm SDL2::SDL2main glad::glad)
 target_compile_options(stelar3D PUBLIC
