@@ -9,5 +9,8 @@ set(03-advanced
 	13-07-cubemap
 	13-08-cubemap-reflection_refraction
 	13-09-uniform_buffer_objects
+	13-10-geometry_shader
+	13-11-exploding_geometry
+	13-12-visualize_normals
 )
 binFromSrcList(${03-advanced})

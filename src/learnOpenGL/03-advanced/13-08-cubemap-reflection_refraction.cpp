@@ -15,7 +15,7 @@ int main(int, char*[])
 
         // build and compile shaders
         //Shader shader("../shaders/PN-MVP-WhichIsCorrect.vert", "../shaders/1Tcubemap-reflection.frag");
-        Shader shader("../shaders/PN-MVP-WhichIsCorrect.vert", "../shaders/1Tcubemap-refraction.frag");
+        Shader shader("../shaders/PN-MVP-WhichIsCorrect.vert", "../shaders/1Tcubemap-refraction.frag", "../shaders/pass-through.geom");
         Shader skyboxShader("../shaders/skybox.vert", "../shaders/skybox.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
