@@ -72,8 +72,10 @@ sudo dnf install libXi-devel libXxf86vm-devel
  * bump maps
  * reflection maps
  * shadow volumes (stencil buffer technique for real-time shadows)
- * post processing filter
+ * post-processing filter
    - Gaussian BLur
+ * Super Sample Anti-Aliasing (SSAA) - render in bigger resolution and downsample to final resolution
+ * MultiSample Anti-Aliasing (MSAA)
 
 ### Phong (in fragment shaders - Gouraud when in vertex shaders)
  * Ambient lighting

@@ -19,6 +19,7 @@ public:
 
     void bind() const;
     static void unbind();
+    unsigned int id() { return vao;};
 private:
     unsigned int vao = 0;
     void reset();

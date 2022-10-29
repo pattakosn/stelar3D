@@ -64,6 +64,11 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+
 	//Request a stencil buffer of at least 1bit per pixel
 	SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 1 );
 
@@ -123,6 +128,11 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POLYGON_SMOOTH);
+
 	int tmp_w, tmp_h;
 	SDL_GetWindowSize(window, &tmp_w, &tmp_h);
 	std::cout << "[ app  ] viewport size: " << tmp_w << "x" << tmp_h << "\n";
@@ -150,6 +160,10 @@ void ogl_context::info( )
 	std::cout << "[OpenGL] Version: " << glGetString(GL_VERSION) << "\n";
 	std::cout << "[OpenGL] Version GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 	std::cout << "[OpenGL] Maximum number of vertex attributes supported: " << nrAttributes << std::endl;
+    int Buffers, Samples;
+    SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &Buffers );
+    SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &Samples );
+    std::cout << "[OpenGL] MultiSampleBuffers: " << Buffers << " MultiSample samples: " << Samples << std::endl;
 }
 
 void ogl_context::swap( )

@@ -1,4 +1,6 @@
 #include "shader.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
     ID = glCreateProgram();
@@ -51,6 +53,14 @@ unsigned int Shader::compileShader(const char* filename, int shader_type) {
     // ensure ifstream objects can throw exceptions:
     srcStream.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     try {
+        //for( std::string location {"../"}; const auto & entry : fs::recursive_directory_iterator(location)) {
+        //    if(entry.m_type == fs::file_type::regular) {
+        //        std::cout << entry.path() << std::endl;
+        //        srcStream.open(entry+filename);
+        //    }
+        //}
+
+
         // open files
         srcStream.open(filename);
         std::stringstream srcStringStream;
@@ -61,7 +71,7 @@ unsigned int Shader::compileShader(const char* filename, int shader_type) {
         // convert stream into string
         source = srcStringStream.str();
     } catch (std::ifstream::failure &e) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\t:" << e.what() << std::endl;
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ\t:" << std::string(filename) << " : " << e.what() << std::endl;
     }
     // 2. compile shader
     unsigned int shader;

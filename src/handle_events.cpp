@@ -1,7 +1,7 @@
 #include "handle_events.h"
 #include <iostream>
 
-void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context) {
+void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context, bool &check_b) {
 	SDL_Event event;
 	static bool wireframe = false;
 	static bool depthTest = false;
@@ -39,6 +39,9 @@ void handle_events(bool &quit, FlyCam &my_cam, ogl_context &my_context) {
 					case SDLK_v:
 						my_cam.ProcessKeyboard(DOWN, my_context.dt());
 						break;
+                    case SDLK_b:
+                        check_b = !check_b;
+                        break;
 					case SDLK_t:
 						if ( wireframe ) {
 							glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

@@ -33,15 +33,28 @@ struct Texture {
 
 class mesh_item {
 public:
-    // mesh Data
-    vector<vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
-
     mesh_item(vector<vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
 
     // render mesh
     void draw(Shader &shader);
+
+    void set_instanced_glm4data(GLuint position) {
+        vao.bind();
+        for (int i = 0; i < 4; ++i) {
+            vao.add_attribute(position + i, 4, sizeof(glm::mat4), i * sizeof(glm::vec4));
+            glVertexAttribDivisor(position + i, 1);
+        }
+        attributes_binding_object::unbind();
+    }
+    void draw_instanced(GLuint amount) {
+        vao.bind();
+        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0, amount);
+        vao.unbind();
+    }
+    // mesh Data
+    vector<vertex>       vertices;
+    vector<unsigned int> indices;
+    vector<Texture>      textures;
 private:
     // render data
     attributes_binding_object vao;

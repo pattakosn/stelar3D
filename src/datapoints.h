@@ -158,7 +158,7 @@ float transparent_vertices[] = {
 };
 
 // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-float quad_vertices[] = {
+float quad_vertices_texCoords[] = {
         // positions   // texCoords
         -1.0f,  1.0f,  0.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 0.0f,
@@ -167,6 +167,17 @@ float quad_vertices[] = {
         -1.0f,  1.0f,  0.0f, 1.0f,
         1.0f, -1.0f,  1.0f, 0.0f,
         1.0f,  1.0f,  1.0f, 1.0f
+};
+
+float quadVerticesColor[] = {
+        // positions     // colors
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+        0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+        -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+        0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+        0.05f,  0.05f,  0.0f, 1.0f, 1.0f
 };
 
 glm::vec3 cube_random_positions[] = {
@@ -377,5 +388,16 @@ float houseGeomPoints[] = {
         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top-right
         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom-right
         -0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // bottom-left
+};
+
+float planePosNorTex[] = {
+        // positions            // normals         // texcoords
+        10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+        -10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+        -10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+
+        10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+        -10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+        10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
 };
 #endif

@@ -36,7 +36,7 @@ int main(int, char*[])
         attributes_binding_object mirror_quadCMDs;
         mirror_quadCMDs.bind();
         vertex_array mirrorQuadDAT;
-        mirrorQuadDAT.add_buffer(quad_vertices, sizeof(quad_vertices));
+        mirrorQuadDAT.add_buffer(quad_vertices_texCoords, sizeof(quad_vertices_texCoords));
         mirror_quadCMDs.add_attribute_floats_array(0, 2, 4, 0);
         mirror_quadCMDs.add_attribute_floats_array(1, 2, 4, 2);
 

@@ -11,8 +11,7 @@ int main(int, char*[]) {
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     constexpr auto textures_are_flipped = true;
-
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(textures_are_flipped);
     Shader shader("../shaders/13-12-visualize_normals-object.vert", "../shaders/13-12-visualize_normals-object.frag");
     Shader normalsShader("../shaders/13-12-visualize_normals-normals.vert", "../shaders/13-12-visualize_normals-normals.frag", "../shaders/13-12-visualize_normals-normals.geom");
     model backpack("../assets/backpack/backpack.obj", textures_are_flipped);

@@ -12,5 +12,9 @@ set(03-advanced
 	13-10-geometry_shader
 	13-11-exploding_geometry
 	13-12-visualize_normals
+	13-13-instancing_glId
+	13-14-instancing_planet
+	13-15-instancing_planet_glId
+	13-16-msaa
 )
 binFromSrcList(${03-advanced})

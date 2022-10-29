@@ -20,9 +20,18 @@ public:
         for (auto &mesh: meshes)
             mesh.draw(shader);
     }
-private:
+    void draw_instanced(GLuint amount) {
+        for (auto& mesh: meshes)
+            mesh.draw_instanced(amount);
+    }
+    void set_instanced_glm4data_every_mesh(GLuint position) {
+        for (auto &mesh : meshes)
+            mesh.set_instanced_glm4data(position);
+    }
+
     // model data
     vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+private:
     vector<mesh_item> meshes;
     string directory;
     //bool gammaCorrection;
