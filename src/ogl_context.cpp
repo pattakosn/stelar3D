@@ -132,6 +132,7 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
+    //glEnable(GL_FRAMEBUFFER_SRGB);
 
 	int tmp_w, tmp_h;
 	SDL_GetWindowSize(window, &tmp_w, &tmp_h);

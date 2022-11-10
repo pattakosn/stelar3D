@@ -53,7 +53,7 @@ int main(int, char*[])
 
         // framebuffer configuration
         frame_buffer fbo;//unsigned int framebuffer;
-        fbo.initialize(my_context.screen_width(), my_context.screen_height());//glGenFramebuffers(1, &framebuffer);
+        fbo.as_renderbuffer(my_context.screen_width(), my_context.screen_height());//glGenFramebuffers(1, &framebuffer);
         frame_buffer::unbind();
 
         glm::vec3 lightPos(0.75f, 0.75f, 0.75f);

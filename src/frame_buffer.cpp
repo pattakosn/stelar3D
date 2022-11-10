@@ -16,7 +16,8 @@ void frame_buffer::bind() {
 void frame_buffer::bind_texture(GLenum target) {
         glBindTexture(target, tb.get());
 }
-void frame_buffer::initialize(int x, int y) {
+
+void frame_buffer::as_renderbuffer(int x, int y) {
         bind();
 
         // create a color attachment texture
@@ -38,6 +39,37 @@ void frame_buffer::initialize(int x, int y) {
         }
 }
 
+void frame_buffer::as_depth_map(const unsigned int width, const unsigned int height) {
+    tb.bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    tb.filtering_parameters(GL_NEAREST, GL_NEAREST);
+    tb.wrap_parameters();
+
+    bind();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tb.get(), 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    unbind();
+}
+
+void frame_buffer::as_depth_map_fixed(const unsigned int width, const unsigned int height) {
+    tb.bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    tb.filtering_parameters(GL_NEAREST, GL_NEAREST);
+    tb.wrap_parameters(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+    bind();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tb.get(), 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    unbind();
+}
+
+void frame_buffer::activate_texture(GLenum id) {
+    tb.activate(id);
+}
 void frame_buffer::unbind() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

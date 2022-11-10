@@ -55,7 +55,7 @@ int main(int, char*[])
 
         // framebuffer configuration
         frame_buffer fbo;
-        fbo.initialize(my_context.screen_width(), my_context.screen_height());
+        fbo.as_renderbuffer(my_context.screen_width(), my_context.screen_height());
         frame_buffer::unbind();
 
         glm::vec3 lightPos(0.75f, 0.75f, 0.75f);

@@ -15,7 +15,10 @@ public:
 
         void bind();
         void bind_texture(GLenum target = GL_TEXTURE_2D);
-        void initialize(int x, int y);
+        void as_renderbuffer(int x, int y);
+        void as_depth_map(const unsigned int width, const unsigned int height);
+        void as_depth_map_fixed(const unsigned int width, const unsigned int height);
+        void activate_texture(GLenum id = GL_TEXTURE0);
         static void unbind();
 private:
         unsigned int fbo;

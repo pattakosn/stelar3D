@@ -53,7 +53,7 @@ int main(int, char*[])
 
         // framebuffer configuration
         frame_buffer fbo;
-        fbo.initialize(my_context.screen_width(), my_context.screen_height());
+        fbo.as_renderbuffer(my_context.screen_width(), my_context.screen_height());
         frame_buffer::unbind();
 
         FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));

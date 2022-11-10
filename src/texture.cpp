@@ -5,11 +5,12 @@
 
 texture::texture() {
     glGenTextures(1, &tex);
+    target = GL_TEXTURE_2D; //TODO i do not like this here but did to quickly have a depth map framebuffer
 }
 
-texture::texture(const std::string fname, bool flipped) : texture() {
+texture::texture(const std::string fname, bool flipped, bool gammaCorrection) : texture() {
     target = GL_TEXTURE_2D;
-    load_image(fname, flipped);
+    load_image(fname, flipped, gammaCorrection);
 }
 
 // loads a cubemap texture from 6 individual texture faces order:
@@ -62,7 +63,7 @@ void texture::bind() {
     assert(glIsTexture(tex) && "This is not a texture..."); // attention: glIsTexture driver implementations may not conform to spec description, so we check AFTER binding
 }
 
-void texture::load_image(const std::string& fname, bool flipped,
+void texture::load_image(const std::string& fname, bool flipped, bool gammaCorrection,
                          int s_wrap, int t_wrap, int min_filter, int mag_filter) {
         bind();
         wrap_parameters(s_wrap, t_wrap);
@@ -74,20 +75,23 @@ void texture::load_image(const std::string& fname, bool flipped,
         int width, height, nrChannels;
         unsigned char *data = stbi_load(fname.c_str(), &width, &height, &nrChannels, 0);
         if (data) {
-            GLenum format;
-            if (nrChannels == 1)
-                format = GL_RED;
-            else if (nrChannels == 3)
-                format = GL_RGB;
-            else if (nrChannels == 4)
-                format = GL_RGBA;
-            else {
+            GLenum internalFormat;
+            GLenum dataFormat;
+            if (nrChannels == 1) {
+                internalFormat = dataFormat = GL_RED;
+            } else if (nrChannels == 3) {
+                internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+                dataFormat = GL_RGB;
+            } else if (nrChannels == 4) {
+                internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+                dataFormat = GL_RGBA;
+            } else {
                 std::cerr << "how is it possible to have " << nrChannels << " channels in " << fname.c_str() <<"?\n";
                 std::abort();
             }
             std::cout << "Loading texture: " << fname.c_str() << " of size: " << width << "x" << height << " of " << nrChannels << std::endl;
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
             glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
             glGenerateMipmap(GL_TEXTURE_2D);
         } else {
