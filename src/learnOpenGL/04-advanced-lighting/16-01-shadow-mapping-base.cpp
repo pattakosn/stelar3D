@@ -6,7 +6,40 @@
 #include "fly_cam.h"
 #include "handle_events.h"
 #include "texture.h"
-#include "frame_buffer.h"
+#include "depth_map_artifacts.h"
+
+void renderCube(attributes_binding_object& cubeCMD)
+{
+    cubeCMD.bind();
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    attributes_binding_object::unbind();
+}
+
+void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, attributes_binding_object& cubeCMD)
+{
+    // floor
+    glm::mat4 model = glm::mat4(1.0f);
+    shader.setMat4("model", model);
+    planeCMDs.bind();
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    // cubes
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
+    model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+    model = glm::scale(model, glm::vec3(0.25));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+}
 
 int main()
 {
@@ -16,6 +49,12 @@ int main()
     // build and compile shaders
     Shader depth("../shaders/16-00-depth.vert", "../shaders/16-00-depth.frag");
     Shader depthDbg("../shaders/16-00-depth-dbg.vert", "../shaders/16-00-depth-dbg.frag");
+    depthDbg.use();
+    depthDbg.setInt("depthMap", 0);
+    Shader scene("../shaders/16-01-shadow-map.vert", "../shaders/16-01-shadow-map.frag");
+    scene.use();
+    scene.setInt("diffuseTexture", 0);
+    scene.setInt("shadowMap", 1);
 
     // plane VAO
     attributes_binding_object planeCMDs;
@@ -44,16 +83,11 @@ int main()
     cubeCMD.add_attribute_floats_array(2, 2, 8, 6);
 
 
-    texture floor("../assets/wood.png"); // WOOD TEXTURE
+    texture floor("../assets/wood.png");
 
     // configure depth map FBO
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    frame_buffer depthMap;
-    depthMap.as_depth_map(SHADOW_WIDTH, SHADOW_HEIGHT);
-
-    // shader configuration
-    depthDbg.use();
-    depthDbg.setInt("depthMap", 0);
+    depth_map_artifacts depthMap(SHADOW_WIDTH, SHADOW_HEIGHT);
 
     // lighting info
     glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
@@ -78,61 +112,38 @@ int main()
         depth.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        depthMap.bind(); //glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        depthMap.bind();
         glClear(GL_DEPTH_BUFFER_BIT);
-        //glActiveTexture(GL_TEXTURE0);
-        floor.activate(GL_TEXTURE0);//glBindTexture(GL_TEXTURE_2D, woodTexture);
-        // floor
-        glm::mat4 model = glm::mat4(1.0f);
-        depth.setMat4("model", model);
-        planeCMDs.bind();//glBindVertexArray(planeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // cubes
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
-        model = glm::scale(model, glm::vec3(0.5f));
-        depth.setMat4("model", model);
-        //renderCube();
-        // render Cube
-        cubeCMD.bind();//glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        attributes_binding_object::unbind();//glBindVertexArray(0);
-        // model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
-        model = glm::scale(model, glm::vec3(0.5f));
-        depth.setMat4("model", model);
-        //renderCube();
-        // render Cube
-        cubeCMD.bind();//glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        attributes_binding_object::unbind();//glBindVertexArray(0);
-        // model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
-        model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
-        model = glm::scale(model, glm::vec3(0.25));
-        depth.setMat4("model", model);
-        //renderCube();
-        // render Cube
-        cubeCMD.bind();//glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        attributes_binding_object::unbind();//glBindVertexArray(0);
-        frame_buffer::unbind();//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        floor.activate(GL_TEXTURE0);
+        renderScene(depth, planeCMDs, cubeCMD);
+        depth_map_artifacts::unbind();
 
         // reset viewport
         glViewport(0, 0, ogl_app.screen_width(), ogl_app.screen_height());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // 2. render scene as normal using the generated depth/shadow map
+        scene.use();
+        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
+        glm::mat4 view = my_cam.GetViewMatrix();
+        scene.setMat4("projection", projection);
+        scene.setMat4("view", view);
+        // set light uniforms
+        scene.setVec3("viewPos", my_cam.Position);
+        scene.setVec3("lightPos", lightPos);
+        scene.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        floor.activate(GL_TEXTURE0);
+        depthMap.activate_texture(GL_TEXTURE1);
+        renderScene(scene, planeCMDs, cubeCMD);
+
         // render Depth map to quad for visual debugging
-        // renders a 1x1 XY quad in NDC
         depthDbg.use();
         depthDbg.setFloat("near_plane", near_plane);
         depthDbg.setFloat("far_plane", far_plane);
-        depthMap.activate_texture(GL_TEXTURE0);//glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, depthMap);
-        //renderQuad();
-        quadCMD.bind();//glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        quadCMD.unbind();//glBindVertexArray(0);
+        depthMap.activate_texture(GL_TEXTURE0);
+        //quadCMD.bind();
+        //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        //quadCMD.unbind();
 
         ogl_app.swap();
         handle_events(quit, my_cam, ogl_app, check);

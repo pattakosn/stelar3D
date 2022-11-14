@@ -13,6 +13,9 @@ texture::texture(const std::string fname, bool flipped, bool gammaCorrection) : 
     load_image(fname, flipped, gammaCorrection);
 }
 
+void texture::set_cube_map() {
+     target = GL_TEXTURE_CUBE_MAP; //NIKOS TODO: refacto: i do not like this hack either but i didnt want to spend too much time at the time
+}
 // loads a cubemap texture from 6 individual texture faces order:
 // +X (right) / -X (left)
 // +Y (top)   / -Y (bottom)

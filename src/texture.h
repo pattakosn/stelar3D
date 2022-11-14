@@ -24,6 +24,7 @@ public:
 
     // text_num ie GL_TEXTURE0, ...
     void activate (int text_num);
+    void set_cube_map();
 
     // wrapping: GL_REPEAT (default wrapping method), GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
     void wrap_parameters (GLint s_wrap = GL_REPEAT, GLint t_wrap = GL_REPEAT) const;

@@ -6,17 +6,15 @@
 #include "fly_cam.h"
 #include "handle_events.h"
 #include "texture.h"
-#include "frame_buffer.h"
+#include "depth_map_fixed.h"
 
-void renderCube(attributes_binding_object& cubeCMD)
-{
+void renderCube(attributes_binding_object& cubeCMD) {
     cubeCMD.bind();//glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     attributes_binding_object::unbind();//glBindVertexArray(0);
 }
 
-void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, attributes_binding_object& cubeCMD)
-{
+void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, attributes_binding_object& cubeCMD) {
     // floor
     glm::mat4 model = glm::mat4(1.0f);
     shader.setMat4("model", model);
@@ -51,7 +49,7 @@ int main()
     Shader depthDbg("../shaders/16-00-depth-dbg.vert", "../shaders/16-00-depth-dbg.frag");
     depthDbg.use();
     depthDbg.setInt("depthMap", 0);
-    Shader scene("../shaders/16-01-shadow-map.vert", "../shaders/16-01-shadow-map.frag");
+    Shader scene("../shaders/16-01-shadow-map.vert", "../shaders/16-02-shadow-map.frag");
     scene.use();
     scene.setInt("diffuseTexture", 0);
     scene.setInt("shadowMap", 1);
@@ -87,8 +85,7 @@ int main()
 
     // configure depth map FBO
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    frame_buffer depthMap;
-    depthMap.as_depth_map(SHADOW_WIDTH, SHADOW_HEIGHT);
+    depth_map_fixed depthMap(SHADOW_WIDTH, SHADOW_HEIGHT);
 
     // lighting info
     glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
@@ -98,6 +95,11 @@ int main()
     planeCMDs.bind();
     bool check;
     while (!quit) {
+        // change light position over time
+        lightPos.x = sin(ogl_app.time()) * 3.0f;
+        lightPos.z = cos(ogl_app.time()) * 2.0f;
+        lightPos.y = 5.0 + cos(ogl_app.time()) * 1.0f;
+
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -105,6 +107,7 @@ int main()
         glm::mat4 lightProjection, lightView;
         glm::mat4 lightSpaceMatrix;
         float near_plane = 1.0f, far_plane = 7.5f;
+        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
         lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
         lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
         lightSpaceMatrix = lightProjection * lightView;
@@ -117,7 +120,7 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
         floor.activate(GL_TEXTURE0);
         renderScene(depth, planeCMDs, cubeCMD);
-        frame_buffer::unbind();
+        depth_map_fixed::unbind();
 
         // reset viewport
         glViewport(0, 0, ogl_app.screen_width(), ogl_app.screen_height());

@@ -4,5 +4,6 @@ set(04-advanced-lighting
 	16-00-shadow-mapping-visualise-depth
 	16-01-shadow-mapping-base
 	16-02-shadow-mapping
+	17-00-point-shadows
 )
 binFromSrcList(${04-advanced-lighting})
