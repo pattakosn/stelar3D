@@ -15,43 +15,43 @@ void renderCube(attributes_binding_object& cubeCMD) {
 }
 
 void renderScene(const Shader &shader, attributes_binding_object& cubeCMD) {
-        // room cube
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, glm::vec3(5.0f));
-        shader.setMat4("model", model);
-        glDisable(GL_CULL_FACE); // note that we disable culling here since we render 'inside' the cube instead of the usual 'outside' which throws off the normal culling methods.
-        shader.setInt("reverse_normals", 1); // A small little hack to invert normals when drawing cube from the inside so lighting still works.
-        renderCube(cubeCMD);
-        shader.setInt("reverse_normals", 0); // and of course disable it
-        glEnable(GL_CULL_FACE);
-        // cubes
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(4.0f, -3.5f, 0.0));
-        model = glm::scale(model, glm::vec3(0.5f));
-        shader.setMat4("model", model);
-        renderCube(cubeCMD);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(2.0f, 3.0f, 1.0));
-        model = glm::scale(model, glm::vec3(0.75f));
-        shader.setMat4("model", model);
-        renderCube(cubeCMD);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-3.0f, -1.0f, 0.0));
-        model = glm::scale(model, glm::vec3(0.5f));
-        shader.setMat4("model", model);
-        renderCube(cubeCMD);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.5f, 1.0f, 1.5));
-        model = glm::scale(model, glm::vec3(0.5f));
-        shader.setMat4("model", model);
-        renderCube(cubeCMD);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.5f, 2.0f, -3.0));
-        model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
-        model = glm::scale(model, glm::vec3(0.75f));
-        shader.setMat4("model", model);
-        renderCube(cubeCMD);
-    }
+    // room cube
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::scale(model, glm::vec3(5.0f));
+    shader.setMat4("model", model);
+    glDisable(GL_CULL_FACE); // note that we disable culling here since we render 'inside' the cube instead of the usual 'outside' which throws off the normal culling methods.
+    shader.setInt("reverse_normals", 1); // A small little hack to invert normals when drawing cube from the inside so lighting still works.
+    renderCube(cubeCMD);
+    shader.setInt("reverse_normals", 0); // and of course disable it
+    glEnable(GL_CULL_FACE);
+    // cubes
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(4.0f, -3.5f, 0.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(2.0f, 3.0f, 1.0));
+    model = glm::scale(model, glm::vec3(0.75f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-3.0f, -1.0f, 0.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-1.5f, 1.0f, 1.5));
+    model = glm::scale(model, glm::vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-1.5f, 2.0f, -3.0));
+    model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+    model = glm::scale(model, glm::vec3(0.75f));
+    shader.setMat4("model", model);
+    renderCube(cubeCMD);
+}
 
 int main()
 {
