@@ -18,15 +18,17 @@ jobs:
     runs-on: ubuntu-22.04
   
     steps:
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: libsdl2-dev libassimp-dev
+
     - name: Checkout repository
       uses: actions/checkout@v2
     
+    
     - name: Checkout submodules
       run: git submodule init; git submodule update external/glm external/imgui
-  
-    - name: Install dependencies
-      run: sudo apt-get install -y libsdl2-dev libassimp-dev
-      
+    
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
