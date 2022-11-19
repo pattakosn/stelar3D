@@ -93,7 +93,8 @@ int main(int, char*[])
                 glDepthFunc(GL_LESS); // set depth function back to default
 
                 my_context.swap();
-                handle_events(quit, my_cam, my_context);
+            bool lol;
+            handle_events(quit, my_cam, my_context, lol);
         }
         return EXIT_SUCCESS;
 }

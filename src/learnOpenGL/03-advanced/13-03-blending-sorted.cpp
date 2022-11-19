@@ -105,7 +105,8 @@ int main(int, char *[])
                 }
 
                 my_context.swap();
-                handle_events(quit, my_cam, my_context);
+            bool lol;
+            handle_events(quit, my_cam, my_context, lol);
         }
         return EXIT_SUCCESS;
 }

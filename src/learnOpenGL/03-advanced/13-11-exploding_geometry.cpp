@@ -45,7 +45,8 @@ int main(int, char*[]) {
         backpack.draw(shader);
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app);
+        bool lol;
+        handle_events(quit, my_cam, ogl_app, lol);
     }
     return EXIT_SUCCESS;
 }

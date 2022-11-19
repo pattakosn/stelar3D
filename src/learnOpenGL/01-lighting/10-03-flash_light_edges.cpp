@@ -98,7 +98,8 @@ int main(int, char *[]) {
         lamp.bind();
         glDrawArrays(GL_TRIANGLES, 0, 36);
       */  my_context.swap();
-        handle_events(quit, my_cam, my_context);
+        bool lol;
+        handle_events(quit, my_cam, my_context, lol);
     }
     return EXIT_SUCCESS;
 }

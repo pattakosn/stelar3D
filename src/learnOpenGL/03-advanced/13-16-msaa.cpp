@@ -42,7 +42,8 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app);
+        bool lol;
+        handle_events(quit, my_cam, ogl_app, lol);
     }
     return EXIT_SUCCESS;
 }

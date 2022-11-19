@@ -95,7 +95,8 @@ int main(int, char*[]) {
 
         win_cam_pos_fps(my_cam, ogl_app);
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app);
+        bool lol;
+        handle_events(quit, my_cam, ogl_app, lol);
     }
     delete modelMatrices;
     return EXIT_SUCCESS;
