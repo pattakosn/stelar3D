@@ -58,7 +58,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
 ## 3D graphics resources
 [SketchFab](https://sketchfab.com/)
 [SO OpenGL documentation](https://sodocumentation.net/opengl)
-[Khronos common opengl mistakes](https://www.khronos.org/opengl/wiki/Common_Mistakes)
+[Khronos common opengl mistakes](https://www.khronos.org/opengl/wiki/Common\_Mistakes)
 [apitrace and references to other 3D profiling tools](https://apitrace.github.io/)
 [ImageDev ThermoFisher Library](https://developer.imageviz.com/)
 [Aeon Engine(c++14/OpenGL3 game engine)] (https://github.com/aeon-engine)
@@ -77,7 +77,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
    - Gaussian BLur
  * Super Sample Anti-Aliasing (SSAA) - render in bigger resolution and downsample to final resolution
  * MultiSample Anti-Aliasing (MSAA)
- * [OpenGL Direct State Access](https://www.khronos.org/opengl/wiki/Direct_State_Access)
+ * [OpenGL Direct State Access](https://www.khronos.org/opengl/wiki/Direct\_State\_Access)
  * (nvidia?) opengl command lists
 
 ### Phong (in fragment shaders - Gouraud when in vertex shaders)
