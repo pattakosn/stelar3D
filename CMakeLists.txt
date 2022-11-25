@@ -1,11 +1,11 @@
-##NIKOS TEST set( CMAKE_TOOLCHAIN_FILE
-##NIKOS TEST      ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
-##NIKOS TEST      CACHE STRING "Vcpkg toolchain file"
-##NIKOS TEST )
-#if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-#  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-#      CACHE STRING "")
-#endif()
+#set( CMAKE_TOOLCHAIN_FILE
+#     ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+#     CACHE STRING "Vcpkg toolchain file"
+#)
+if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      CACHE STRING "")
+endif()
 
 cmake_minimum_required (VERSION 3.22.2 FATAL_ERROR)
 project(stelar3D)
@@ -32,7 +32,7 @@ endif()
 
 add_subdirectory(external/glm)
 add_subdirectory(external/glad)
-find_package(SDL2 REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
 find_package(assimp REQUIRED)
 set_target_properties(assimp::assimp PROPERTIES MAP_IMPORTED_CONFIG_DEBUG Release)
 # Workaround for flawed assimp package on Ubuntu: remove non-existing paths (like "/usr/lib/include")
