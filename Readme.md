@@ -4,11 +4,15 @@ using these dependencies:
 * [SDL2](https://www.libsdl.org/)
 * [Assimp](https://assimp.org/)
 * [stb\_image](https://github.com/nothings/stb)
-* ~ [GLAD](https://github.com/Dav1dde/glad) ~
-* ~ [GLM](https://github.com/g-truc/glm) ~
-* ~ [Soil2](https://github.com/SpartanJ/soil2) ~
+* [GLAD](https://github.com/Dav1dde/glad)
+* [GLM](https://github.com/g-truc/glm)
+* ~[Soil2](https://github.com/SpartanJ/soil2)~ (do not need for now, no longer using it)
+
 using the vcpkg package manager to automate installation of these.
-vcpkg does not really work for me on windows+gcc/clang. soil2 i do not need for now so i am no longer including it. I also include a hard copy of glad and glm to make my life easier.
+
+vcpkg does not really work for me(yet?) on windows+gcc/clang.
+
+I include a subrepository copy of glad and glm to make my life easier.
 
 ```
 git clone git@github.com:pattakosn/stelar3D.git --recurse-submodules
@@ -56,13 +60,13 @@ sudo dnf install libXi-devel libXxf86vm-devel
 
 
 ## 3D graphics resources
-[SketchFab](https://sketchfab.com/)
-[SO OpenGL documentation](https://sodocumentation.net/opengl)
-[Khronos common opengl mistakes](https://www.khronos.org/opengl/wiki/Common\_Mistakes)
-[apitrace and references to other 3D profiling tools](https://apitrace.github.io/)
-[ImageDev ThermoFisher Library](https://developer.imageviz.com/)
-[Aeon Engine(c++14/OpenGL3 game engine)] (https://github.com/aeon-engine)
-[Vulkan examples](https://github.com/SaschaWillems/Vulkan)
+* [SketchFab](https://sketchfab.com/)
+* [SO OpenGL documentation](https://sodocumentation.net/opengl)
+* [Khronos common opengl mistakes](https://www.khronos.org/opengl/wiki/Common\_Mistakes)
+* [apitrace and references to other 3D profiling tools](https://apitrace.github.io/)
+* [ImageDev ThermoFisher Library](https://developer.imageviz.com/)
+* [Aeon Engine](https://github.com/aeon-engine) (c++14/OpenGL3 game engine)
+* [Vulkan examples](https://github.com/SaschaWillems/Vulkan)
 
 ## 3D graphics techniques list
  * lighting maps
