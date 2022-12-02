@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include "stb_image.h"
+#include "find_file_path.h"
 
 texture::texture() {
     glGenTextures(1, &tex);
@@ -10,7 +11,7 @@ texture::texture() {
 
 texture::texture(const std::string fname, bool flipped, bool gammaCorrection) : texture() {
     target = GL_TEXTURE_2D;
-    load_image(fname, flipped, gammaCorrection);
+    load_image(find_file_path(fname), flipped, gammaCorrection);
 }
 
 void texture::set_cube_map() {

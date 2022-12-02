@@ -60,14 +60,14 @@ int main()
     glEnable(GL_CULL_FACE);
 
     // build and compile shaders
-    Shader scene("../shaders/17-00-point-shadow.vert", "../shaders/17-00-point-shadow.frag");
+    Shader scene("17-00-point-shadow.vert", "17-00-point-shadow.frag");
     scene.use();
     scene.setInt("diffuseTexture", 0);
     scene.setInt("depthMap", 1);
     Shader depth("../shaders/17-00-point-shadow-depth.vert", "../shaders/17-00-point-shadow-depth.frag", "../shaders/17-00-point-shadow-depth.geom");
 
     // load textures
-    texture floor("../assets/wood.png");
+    texture floor("wood.png");
 
     attributes_binding_object cubeCMD;
     cubeCMD.bind();

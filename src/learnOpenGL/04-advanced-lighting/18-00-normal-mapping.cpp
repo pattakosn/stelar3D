@@ -17,13 +17,13 @@ int main() {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 
-    Shader shader("../shaders/18-00-normal-mapping.vert", "../shaders/18-00-normal-mapping.frag");
+    Shader shader("18-00-normal-mapping.vert", "18-00-normal-mapping.frag");
     shader.use();
     shader.setInt("diffuseMap", 0);
     shader.setInt("normalMap", 1);
 
-    texture diffuseMap("../assets/brickwall.jpg");
-    texture normalMap("../assets/brickwall_normal.jpg");
+    texture diffuseMap("brickwall.jpg");
+    texture normalMap("brickwall_normal.jpg");
 
     attributes_binding_object quadCMD;
     quadCMD.bind();

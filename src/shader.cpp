@@ -1,20 +1,19 @@
 #include "shader.h"
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "find_file_path.h"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
     ID = glCreateProgram();
 
     // vertex shader
-    unsigned int vertex = compileShader(vertexPath, GL_VERTEX_SHADER);
+    unsigned int vertex = compileShader(find_file_path(vertexPath).c_str(), GL_VERTEX_SHADER);
 
     //fragment shader
-    unsigned int fragment = compileShader(fragmentPath, GL_FRAGMENT_SHADER);
+    unsigned int fragment = compileShader(find_file_path(fragmentPath).c_str(), GL_FRAGMENT_SHADER);
 
     // geometry shader
     unsigned int geometry;
     if(geometryPath != nullptr) {
-        geometry = compileShader(geometryPath, GL_GEOMETRY_SHADER);
+        geometry = compileShader(find_file_path(geometryPath).c_str(), GL_GEOMETRY_SHADER);
     }
 
     glLinkProgram(ID);
@@ -53,14 +52,6 @@ unsigned int Shader::compileShader(const char* filename, int shader_type) {
     // ensure ifstream objects can throw exceptions:
     srcStream.exceptions (std::ifstream::failbit | std::ifstream::badbit);
     try {
-        //for( std::string location {"../"}; const auto & entry : fs::recursive_directory_iterator(location)) {
-        //    if(entry.m_type == fs::file_type::regular) {
-        //        std::cout << entry.path() << std::endl;
-        //        srcStream.open(entry+filename);
-        //    }
-        //}
-
-
         // open files
         srcStream.open(filename);
         std::stringstream srcStringStream;

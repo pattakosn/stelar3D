@@ -15,7 +15,10 @@ add_library(stelar3D
     win_cam_pos_fps.cpp win_cam_pos_fps.h
     shader.cpp shader.h
     depth_map_artifacts.cpp depth_map_artifacts.h
-    depth_map_fixed.cpp depth_map_fixed.h depth_cubemap.cpp depth_cubemap.h)
+    depth_map_fixed.cpp depth_map_fixed.h
+    depth_cubemap.cpp depth_cubemap.h
+    find_file_path.cpp find_file_path.h
+)
 target_link_libraries(stelar3D PUBLIC imgui::imgui glm::glm SDL2::SDL2main glad::glad)
 target_compile_options(stelar3D PUBLIC
                    #$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>

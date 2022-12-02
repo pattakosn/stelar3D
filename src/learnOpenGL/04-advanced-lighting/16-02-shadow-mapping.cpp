@@ -45,11 +45,11 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // build and compile shaders
-    Shader depth("../shaders/16-00-depth.vert", "../shaders/16-00-depth.frag");
-    Shader depthDbg("../shaders/16-00-depth-dbg.vert", "../shaders/16-00-depth-dbg.frag");
+    Shader depth("16-00-depth.vert", "16-00-depth.frag");
+    Shader depthDbg("16-00-depth-dbg.vert", "16-00-depth-dbg.frag");
     depthDbg.use();
     depthDbg.setInt("depthMap", 0);
-    Shader scene("../shaders/16-01-shadow-map.vert", "../shaders/16-02-shadow-map.frag");
+    Shader scene("16-01-shadow-map.vert", "16-02-shadow-map.frag");
     scene.use();
     scene.setInt("diffuseTexture", 0);
     scene.setInt("shadowMap", 1);

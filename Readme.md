@@ -69,12 +69,11 @@ sudo dnf install libXi-devel libXxf86vm-devel
 * [Vulkan examples](https://github.com/SaschaWillems/Vulkan)
 
 ## 3D graphics techniques list
+tangent space
  * lighting maps
-     - diffuse maps
-     - specular maps 
+   - diffuse maps
+   - specular maps 
  * emission maps
- * normal maps
- * bump maps
  * reflection maps
  * shadow volumes (stencil buffer technique for real-time shadows)
  * post-processing filter
@@ -84,6 +83,24 @@ sudo dnf install libXi-devel libXxf86vm-devel
  * [OpenGL Direct State Access](https://www.khronos.org/opengl/wiki/Direct\_State\_Access)
  * (nvidia?) opengl command lists
 
+### texture mapping techniques 
+ * local maps:
+   * displacement mapping
+   * normal mapping
+   * parallax mapping 
+   * bump mapping
+   * UV mapping
+   * UVW mapping
+   * relief mapping
+   * alpha mapping
+   * occlusion mapping
+   * specular mapping
+ * environment maps:
+   * Cube mapping
+   * Sphere mapping
+   * Environment mapping
+
+   
 ### Phong (in fragment shaders - Gouraud when in vertex shaders)
  * Ambient lighting
  * Diffuse lighting
