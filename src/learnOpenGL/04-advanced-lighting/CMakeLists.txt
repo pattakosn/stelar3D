@@ -7,5 +7,7 @@ set(04-advanced-lighting
 	17-00-point-shadows
 	18-00-normal-mapping
     19-00-parallax-mapping
+	19-01-steep-parallax-mapping
+	19-02-parallax-occlusion-mapping
 )
 binFromSrcList(${04-advanced-lighting})

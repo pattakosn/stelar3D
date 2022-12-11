@@ -17,7 +17,7 @@ int main() {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 
-    Shader shader("19-00-parallax-mapping.vert", "19-00-parallax-mapping.frag");
+    Shader shader("19-01-steep-parallax-mapping.vert", "19-01-steep-parallax-mapping.frag");
     shader.use();
     shader.setInt("diffuseMap", 0);
     shader.setInt("normalMap", 1);

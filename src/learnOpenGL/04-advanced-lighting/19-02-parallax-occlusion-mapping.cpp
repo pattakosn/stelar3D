@@ -17,18 +17,18 @@ int main() {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 
-    Shader shader("19-00-parallax-mapping.vert", "19-00-parallax-mapping.frag");
+    Shader shader("19-02-parallax-occlusion-mapping.vert", "19-02-parallax-occlusion-mapping.frag");
     shader.use();
     shader.setInt("diffuseMap", 0);
     shader.setInt("normalMap", 1);
     shader.setInt("depthMap", 2);
 
-    texture diffuseMap("bricks2.jpg");
-    texture normalMap("bricks2_normal.jpg");
-    texture heightMap("bricks2_disp.jpg");
-    //texture diffuseMap("wood.png");
-    //texture normalMap("wood_normal.png");
-    //texture heightMap("wood_disp.png");
+//    texture diffuseMap("bricks2.jpg");
+//    texture normalMap("bricks2_normal.jpg");
+//    texture heightMap("bricks2_disp.jpg");
+    texture diffuseMap("wood.png");
+    texture normalMap("wood_normal.png");
+    texture heightMap("wood_disp.png");
 
     attributes_binding_object quadCMD;
     quadCMD.bind();
