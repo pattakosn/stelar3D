@@ -39,8 +39,7 @@ void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, att
     renderCube(cubeCMD);
 }
 
-int main()
-{
+int main(int, char *[]) {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 

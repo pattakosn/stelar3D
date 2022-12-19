@@ -8,8 +8,7 @@
 #include "texture.h"
 #include "depth_map_artifacts.h"
 
-int main()
-{
+int main(int, char *[]) {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 

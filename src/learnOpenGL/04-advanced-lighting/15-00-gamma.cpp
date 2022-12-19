@@ -7,8 +7,7 @@
 #include "handle_events.h"
 #include "texture.h"
 
-int main()
-{
+int main(int, char *[]) {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

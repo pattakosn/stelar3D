@@ -33,6 +33,7 @@ cmake --build .  --config Debug -j 12
 .\vcpkg\vcpkg.exe install assimp:x64-windows
 .\vcpkg\vcpkg.exe install soil2:x64-windows
 .\vcpkg\vcpkg.exe install --triplet=x64-windows --triplet=x64-mingw-static sdl2 glad glm assimp soil2
+cmake -DCMAKE_TOOLCHAIN_FILE=../external/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 export VCPKG_ROOT=/d/learnopengl-mine/vcpkg
 export VCPKG_FEATURE_FLAGS="-manifests"
@@ -110,6 +111,12 @@ tangent space
  * Directional light
  * Point light
  * Spot light
+
+# Tone Mapping
+**HDR** (high dynamic range) are converted to **LDR** using **tone mapping** algorithms.
+
+Reinhard tone mapping : simplest tone mapping algorithm
+automatic exposure adjustment or eye adaptation
 
 # GPU Generations
 

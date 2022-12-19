@@ -13,7 +13,7 @@ void renderQuad(attributes_binding_object& quadCMD) {
     attributes_binding_object::unbind();
 }
 
-int main() {
+int main(int, char *[]) {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 

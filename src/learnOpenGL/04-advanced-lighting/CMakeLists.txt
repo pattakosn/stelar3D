@@ -9,5 +9,6 @@ set(04-advanced-lighting
     19-00-parallax-mapping
 	19-01-steep-parallax-mapping
 	19-02-parallax-occlusion-mapping
+	20-00-HDR
 )
 binFromSrcList(${04-advanced-lighting})

@@ -53,8 +53,7 @@ void renderScene(const Shader &shader, attributes_binding_object& cubeCMD) {
     renderCube(cubeCMD);
 }
 
-int main()
-{
+int main(int, char *[]) {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

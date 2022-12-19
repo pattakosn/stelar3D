@@ -6,7 +6,7 @@
 #include "fly_cam.h"
 #include "handle_events.h"
 
-int main()
+int main(int, char *[])
 {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
