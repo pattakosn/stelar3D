@@ -68,6 +68,7 @@ sudo dnf install libXi-devel libXxf86vm-devel
 * [ImageDev ThermoFisher Library](https://developer.imageviz.com/)
 * [Aeon Engine](https://github.com/aeon-engine) (c++14/OpenGL3 game engine)
 * [Vulkan examples](https://github.com/SaschaWillems/Vulkan)
+* [SIMDstring](https://github.com/RobloxResearch/SIMDString) std string compatible replacement using simd
 
 ## 3D graphics techniques list
 tangent space
