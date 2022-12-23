@@ -21,7 +21,7 @@ add_library(stelar3D
     find_file_path.cpp find_file_path.h
     #assets_path.h
 )
-target_link_libraries(stelar3D PUBLIC imgui::imgui glad::glad)
+target_link_libraries(stelar3D PUBLIC imgui::imgui glm::glm glad::glad assimp::assimp)
 target_compile_options(stelar3D PUBLIC
                    #$<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
                    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic>
