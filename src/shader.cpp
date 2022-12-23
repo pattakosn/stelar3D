@@ -3,18 +3,22 @@
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
     ID = glCreateProgram();
-
+try {
     // vertex shader
-    unsigned int vertex = compileShader(find_file_path(vertexPath).c_str(), GL_VERTEX_SHADER);
+    auto lol = find_file_path(vertexPath);
+    unsigned int vertex = compileShader(lol.c_str(), GL_VERTEX_SHADER);
 
     //fragment shader
-    unsigned int fragment = compileShader(find_file_path(fragmentPath).c_str(), GL_FRAGMENT_SHADER);
+    lol = find_file_path(fragmentPath);
+    unsigned int fragment = compileShader(lol.c_str(), GL_FRAGMENT_SHADER);
 
     // geometry shader
     unsigned int geometry;
     if(geometryPath != nullptr) {
-        geometry = compileShader(find_file_path(geometryPath).c_str(), GL_GEOMETRY_SHADER);
+        lol = find_file_path(geometryPath);
+        geometry = compileShader(lol.c_str(), GL_GEOMETRY_SHADER);
     }
+
 
     glLinkProgram(ID);
     checkCompileErrors(ID, true);
@@ -23,6 +27,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
         glDeleteShader(geometry);
     glDeleteShader(fragment);
     glDeleteShader(vertex);
+} catch (std::exception& error) {
+    std::cerr << "shader creation errror: " << error.what() << "std::endl";
+}
 }
 
 void Shader::checkCompileErrors(unsigned int shader, bool is_shader_program) {

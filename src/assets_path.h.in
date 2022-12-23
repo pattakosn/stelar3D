@@ -1,0 +1,4 @@
+#ifndef ASSETS_PATH_H_IN
+#define ASSETS_PATH_H_IN
+const static std::string PROJECT_TOP_LEVEL_PATH {"${PROJECT_SOURCE_DIR}"}
+#endif

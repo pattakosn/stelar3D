@@ -27,19 +27,15 @@ Windows:
 cmake --build .  --config Debug -j 12
 
 .\vcpkg\bootstrap-vcpkg.bat
-.\vcpkg\vcpkg.exe install sdl2:x64-windows
-.\vcpkg\vcpkg.exe install glad:x64-windows
-.\vcpkg\vcpkg.exe install glm:x64-windows
-.\vcpkg\vcpkg.exe install assimp:x64-windows
-.\vcpkg\vcpkg.exe install soil2:x64-windows
+.\vcpkg.exe integrate project
 .\vcpkg\vcpkg.exe install --triplet=x64-windows --triplet=x64-mingw-static sdl2 glad glm assimp soil2
 cmake -DCMAKE_TOOLCHAIN_FILE=../external/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
+cmake -DCMAKE_TOOLCHAIN_FILE="D:/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_TRIPLETS="../cmake" -DVCPKG_HOST_TRIPLET="x64-windows-vs2022" -DVCPKG_TARGET_TRIPLET="x64-windows-vs2022" ../
+cmake -DCMAKE_TOOLCHAIN_FILE="D:/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_HOST_TRIPLET="x64-mingw-dynamic" -DVCPKG_TARGET_TRIPLET="x64-mingw-dynamic" ../
+
 export VCPKG_ROOT=/d/learnopengl-mine/vcpkg
-export VCPKG_FEATURE_FLAGS="-manifests"
-cmake ../ -DCMAKE_TOOLCHAIN_FILE=/c/vcpkg/scripts/buildsystems/vcpkg.cmake -A x64
-cmake -DVCPKG_TARGET_TRIPLET=x64-mingw-static/dynamic -DVCPKG_HOST_TRIPLET=x64-mingw-static/dynamic ..
- .\vcpkg.exe integrate project
+
 export HUNTER_ROOT=/d/hunter
 ```
 

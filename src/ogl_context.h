@@ -1,7 +1,6 @@
 #pragma once
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "imgui_impl_opengl3.h"
 #include "glad/glad.h"
 //#define SDL_MAIN_HANDLED
