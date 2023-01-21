@@ -38,8 +38,7 @@ endif()
 add_executable(get_all_GLextensions get_all_GLextensions.cpp)
 target_link_libraries(get_all_GLextensions
         PRIVATE
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+        glfw
         glad
 )
 set_target_properties(get_all_GLextensions PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})

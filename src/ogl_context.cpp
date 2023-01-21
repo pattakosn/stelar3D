@@ -1,30 +1,5 @@
-#include <iostream>
 #include "ogl_context.h"
-
-static void sdl_die(const char * message)
-{
-	std::cerr << message << " : " << std::string(SDL_GetError()) << "\n";
-	exit(EXIT_FAILURE);
-}
-
-void checkSDLError(int
-#ifndef NDEBUG
-		line = -1
-#endif
-    )
-
-{
-#ifndef NDEBUG
-    if (const char *error = SDL_GetError(); *error != '\0')
-	{
-		std::cerr << "SDL: " << std::string(error);
-		if (line != -1)
-			std::cerr << " at line: " << line ;
-		std::cerr << "\n";
-		SDL_ClearError();
-	}
-#endif
-}
+#include <iostream>
 
 ogl_context::~ogl_context()
 {
@@ -34,11 +9,8 @@ ogl_context::~ogl_context()
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    /* Delete our opengl context, destroy our window, and shutdown SDL */
-    SDL_GL_DeleteContext(gl_context);
-//    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    // this is called by atexit(): SDL_Quit();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }
 
 ogl_context::ogl_context(const std::string win_title, const int w, const int h, const bool full_screen) : width{w}, height{h}
@@ -150,17 +122,17 @@ ogl_context::ogl_context(const std::string win_title, const int w, const int h, 
 
 void ogl_context::info( )
 {
-	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+    int nrAttributes;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 
-	std::cout << "[ app  ] OpenGL loaded\n";
-	// Loaded OpenGL successfully.
-	std::cout << "[OpenGL] OpenGL version loaded: " << GLVersion.major << "." << GLVersion.minor << std::endl;
-	std::cout << "[OpenGL] Vendor: " << glGetString(GL_VENDOR) << "\n";
-	std::cout << "[OpenGL] Renderer: " << glGetString(GL_RENDERER) << "\n";
-	std::cout << "[OpenGL] Version: " << glGetString(GL_VERSION) << "\n";
-	std::cout << "[OpenGL] Version GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
-	std::cout << "[OpenGL] Maximum number of vertex attributes supported: " << nrAttributes << std::endl;
+    std::cout << "[ app  ] OpenGL loaded\n";
+    // Loaded OpenGL successfully.
+    std::cout << "[OpenGL] OpenGL version loaded: " << GLVersion.major << "." << GLVersion.minor << std::endl;
+    std::cout << "[OpenGL] Vendor: " << glGetString(GL_VENDOR) << "\n";
+    std::cout << "[OpenGL] Renderer: " << glGetString(GL_RENDERER) << "\n";
+    std::cout << "[OpenGL] Version: " << glGetString(GL_VERSION) << "\n";
+    std::cout << "[OpenGL] Version GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
+    std::cout << "[OpenGL] Maximum number of vertex attributes supported: " << nrAttributes << std::endl;
     int Buffers, Samples;
     SDL_GL_GetAttribute( SDL_GL_MULTISAMPLEBUFFERS, &Buffers );
     SDL_GL_GetAttribute( SDL_GL_MULTISAMPLESAMPLES, &Samples );
@@ -169,7 +141,7 @@ void ogl_context::info( )
 
 void ogl_context::swap( )
 {
-	SDL_GL_SwapWindow(window);
+        glfwSwapBuffers(window);
 	dt_update();
 }
 

@@ -1,64 +1,62 @@
-// python -m glad --out-path=build --api="gl=2.1" --extensions="" --generator="c"
-// g++ example/c++/sdl.cpp build/src/glad.c -Ibuild/include -lSDL2 -ldl
-
 #include <iostream>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 
-#include <glad/glad.h>
-#include <SDL2/SDL.h>
+//bool IsExtensionSupported(const char *name)
+//{
+//        GLint n=0;
+//        glGetIntegerv(GL_NUM_EXTENSIONS, &n);
+//        for (GLint i=0; i<n; i++) {
+//                auto extension = reinterpret_cast<const char*>(glad_glGetStringi(GL_EXTENSIONS, i));
+//                if (!strcmp(name, extension)) {
+//                        return true;
+//                }
+//        }
+//        return false;
+//}
 
-#include <string.h>
-bool IsExtensionSupported(const char *);
+static void framebuffer_size_callback(GLFWwindow*, int width, int height) {
+    glViewport(0, 0, width, height);
+}
 
-bool IsExtensionSupported(const char *name)
+static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    GLint n=0;
-    glGetIntegerv(GL_NUM_EXTENSIONS, &n);
-    for (GLint i=0; i<n; i++) {
-        auto extension = reinterpret_cast<const char*>(glad_glGetStringi(GL_EXTENSIONS, i));
-        if (!strcmp(name, extension)) {
-            return true;
-        }
-    }
-    return false;
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+void error_callback(int /*error*/, const char* description)
+{
+    fprintf(stderr, "Error: %s\n", description);
 }
 
 int main(int, char*[])
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "SDL2 video subsystem couldn't be initialized. Error: "
-                  << SDL_GetError()
-                  << std::endl;
-        exit(1);
+    glfwSetErrorCallback(error_callback);
+    if (!glfwInit()) {
+        std::cerr << "GLFW3 failed to initialize." << std::endl;
+        exit(EXIT_FAILURE);
     }
 
-    SDL_Window* window = SDL_CreateWindow("Glad Sample",
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          800, 600, SDL_WINDOW_SHOWN |
-                                                    SDL_WINDOW_OPENGL);
-
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
-                                                SDL_RENDERER_ACCELERATED);
-
-    if (renderer == nullptr) {
-        std::cerr << "SDL2 Renderer couldn't be created. Error: "
-                  << SDL_GetError()
-                  << std::endl;
-        exit(1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "get all GL extensions", nullptr, nullptr);
+    if (!window) {
+        std::cerr << "Failed to create GLFW context." << std::endl;
+        exit(EXIT_FAILURE);
     }
 
-    // Create a OpenGL context on SDL2
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    glfwMakeContextCurrent(window);
 
     // Load GL extensions using glad
-    if (!gladLoadGLLoader((GLADloadproc) SDL_GL_GetProcAddress)) {
-        std::cerr << "Failed to initialize the OpenGL context." << std::endl;
-        exit(1);
-    }
+    int version = gladLoadGL(glfwGetProcAddress);
+    if (version == 0) {
+        std::cerr << "Failed to initialize OpenGL context." << std::endl;
+        exit(EXIT_FAILURE);
+    } else
+        std::cout << "OpenGL version loaded" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
-    // Loaded OpenGL successfully.
-    std::cout << "OpenGL version loaded: " << GLVersion.major << "."
-              << GLVersion.minor << std::endl;
+    glfwSwapInterval(1);
 
     int NumberOfExtensions;
     glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
@@ -68,46 +66,22 @@ int main(int, char*[])
         printf("OpenGL extension #%d: %s\n", i, extension);
     }
 
-    // Create an event handler
-    SDL_Event event;
-    // Loop condition
-    bool running = true;
-
-    while (running) {
-        SDL_PollEvent(&event);
-
-        switch(event.type) {
-            case SDL_QUIT:
-                running = false;
-                break;
-
-            case SDL_KEYDOWN:
-                switch(event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        running = false;
-                        break;
-                }
-        }
-
-        glClearColor(0, 0, 0, 1);
-
-        // You'd want to use modern OpenGL here
-        glColor3d(0., 1., 0.);
-        glBegin(GL_TRIANGLES);
-        glVertex2f(.2f, 0.f);
-        glVertex2f(.01f, .2f);
-        glVertex2f(-.2f, 0.f);
-        glEnd();
-
-        SDL_GL_SwapWindow(window);
+    {
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
+    }
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+    while (!glfwWindowShouldClose(window)) {
+        glClearColor(0.1f, 0.9f, 0.1f, 1.);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
-    // Destroy everything to not leak memory.
-    SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
-    SDL_Quit();
-
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -29,8 +29,10 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-find_package(SDL2 CONFIG REQUIRED)
-
+#find_package(OpenMP)
+find_package(OpenGL REQUIRED)
+#find_package(SDL2 CONFIG REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 set_target_properties(assimp::assimp PROPERTIES MAP_IMPORTED_CONFIG_DEBUG Release)
 # Workaround for flawed assimp package on Ubuntu: remove non-existing paths (like "/usr/lib/include")
@@ -65,11 +67,6 @@ set_target_properties(assimp::assimp PROPERTIES MAP_IMPORTED_CONFIG_DEBUG Releas
 #
 #    message(STATUS "ASSIMP_INCLUDE_DIRS after workaround: " ${ASSIMP_INCLUDE_DIRS})
 #endif()
-
-#find_package(OpenMP)
-
-find_package(OpenGL REQUIRED)
-
 add_subdirectory(external/glm)
 add_subdirectory(external/glad)
 
@@ -94,22 +91,22 @@ add_library(imgui STATIC
         external/imgui/imstb_rectpack.h
         external/imgui/imstb_textedit.h
         external/imgui/imstb_truetype.h
-        # SDL2 and OpenGL specific files
-        external/imgui/backends/imgui_impl_sdl.cpp
-        external/imgui/backends/imgui_impl_sdl.h
+        # glfw3 and OpenGL specific files
+        external/imgui/backends/imgui_impl_glfw.cpp
+        external/imgui/backends/imgui_impl_glfw.h
         external/imgui/backends/imgui_impl_opengl3.cpp
-        external/imgui/backends/imgui_impl_opengl3.h)
+        external/imgui/backends/imgui_impl_opengl3.h
+)
 add_library(imgui::imgui ALIAS imgui)
 target_link_libraries(imgui
     PUBLIC
     OpenGL::GL
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    glfw
 )
 target_include_directories(imgui PUBLIC external/imgui/ external/imgui/backends/)
 
 
-add_executable(imgui-demo external/imgui/examples/example_sdl_opengl3/main.cpp)
+add_executable(imgui-demo external/imgui/examples/example_glfw_opengl3/main.cpp)
 target_link_libraries(imgui-demo imgui)
 set_target_properties(imgui-demo PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 if(IPOsupported)
