@@ -1,4 +1,3 @@
-#include <iostream>
 #include "shader.h"
 #include "ogl_context.h"
 #include "element_array.h"
@@ -7,9 +6,9 @@
 #include "texture.h"
 
 int main(int, char *[]) {
-    ogl_context my_context;
+    ogl_context ogl_context;
 
-    Shader my_shader("../shaders/05-00-coordinates.vert", "../shaders/05-00-coordinates.frag");
+    Shader my_shader("05-00-coordinates.vert", "05-00-coordinates.frag");
 
     float vertices[] = {
         // positions        // texture coords
@@ -35,17 +34,17 @@ int main(int, char *[]) {
     element_array triangle_idx;
     triangle_idx.add_buffer(indices, sizeof(indices));
 
-    texture wood_box("../assets/wooden_container.jpg", true);
-    texture face("../assets/awesomeface.png", true);
+    texture wood_box("wooden_container.jpg", true);
+    texture face("awesomeface.png", true);
 
     my_shader.use();
 
     glUniform1i(glGetUniformLocation(my_shader.ID, "texture0"), 0); // set it manually
     my_shader.setInt("texture1", 1); // or with shader class
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    SDL_Event event;
-    bool quit = false;
-    while (!quit) {
+
+    FlyCam camera;
+    while (!ogl_context.should_close()) {
         glClear(GL_COLOR_BUFFER_BIT);
         my_shader.use();
         wood_box.activate(GL_TEXTURE0);
@@ -66,37 +65,9 @@ int main(int, char *[]) {
         // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
         my_shader.setMat4("projection", projection);
         triangle.bind();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        my_context.swap();
-
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_KEYDOWN:
-                    switch (event.key.keysym.sym) {
-                        case SDLK_ESCAPE:
-                        case SDLK_q:
-                            quit = true;
-                            break;
-                    }
-                    break;
-                case SDL_QUIT:
-                    quit = true;
-                    break;
-                case SDL_WINDOWEVENT:
-                    switch (event.window.event) {
-                        case SDL_WINDOWEVENT_RESIZED:
-                            std::cout << "MESSAGE:Resizing window...\n";
-                            //resizeWindow(m_event.window.data1, m_event.window.data2);
-                            std::cout << "MESSAGE: Window [width x height] = " << event.window.data1 << " x "
-                                      << event.window.data2 << "\n";//%d, %d\n", windowWidth, windowHeight);
-                            //m_camera->resizeWindow(windowWidth, windowHeight);
-                            //TODO: move this to gl_context so as to update WIDTH/HEIGHT
-                            glViewport(0, 0, event.window.data1, event.window.data2);
-                            break;
-                    }
-                    break;
-            }
-        }
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        ogl_context.swap();
+        ogl_context.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

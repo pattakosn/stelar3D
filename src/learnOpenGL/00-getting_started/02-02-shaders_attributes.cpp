@@ -26,7 +26,7 @@ const GLchar *f_shader_src = "#version 330 core \n \
 
 int main(int, char*[])
 {
-	ogl_context my_ogl45_app;
+	ogl_context ogl_context;
 
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -74,41 +74,14 @@ int main(int, char*[])
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	SDL_Event event;
-	bool quit = false;
-	while (!quit) {
+    FlyCam camera;
+    while (!ogl_context.should_close()) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shaderProgram);
 		triangle.bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		my_ogl45_app.swap();
-
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
-				case SDLK_q:
-					quit = true;
-					break;
-				}
-				break;
-			case SDL_QUIT:
-				quit = true;
-				break;
-			case SDL_WINDOWEVENT:
-				switch (event.window.event) {
-				case SDL_WINDOWEVENT_RESIZED:
-                    std::cout << "MESSAGE:Resizing window...\n";
-					//resizeWindow(m_event.window.data1, m_event.window.data2);
-                    std::cout << "MESSAGE: Window [width x height] = " << event.window.data1 << " x " << event.window.data2 << "\n";//%d, %d\n", windowWidth, windowHeight);
-					//m_camera->resizeWindow(windowWidth, windowHeight);
-					glViewport(0, 0, event.window.data1, event.window.data2);
-					break;
-				}
-				break;
-			}
-		}
+        ogl_context.swap();
+        ogl_context.check_keys(camera);
 	}
 	return EXIT_SUCCESS;
 }

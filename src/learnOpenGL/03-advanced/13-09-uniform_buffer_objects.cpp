@@ -2,20 +2,19 @@
 #include "fly_cam.h"
 #include "shader.h"
 #include "datapoints.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "win_cam_pos_fps.h"
 
 int main(int, char*[])
 {
-        ogl_context my_context;
+        ogl_context ogl_context;
         glEnable(GL_DEPTH_TEST);
 
-        Shader shaderRed("../shaders/uniform_buffer.vert", "../shaders/red.frag");
-        Shader shaderGreen("../shaders/uniform_buffer.vert", "../shaders/green.frag");
-        Shader shaderBlue("../shaders/uniform_buffer.vert", "../shaders/blue.frag");
-        Shader shaderYellow("../shaders/uniform_buffer.vert", "../shaders/yellow.frag");
+        Shader shaderRed("uniform_buffer.vert", "red.frag");
+        Shader shaderGreen("uniform_buffer.vert", "green.frag");
+        Shader shaderBlue("uniform_buffer.vert", "blue.frag");
+        Shader shaderYellow("uniform_buffer.vert", "yellow.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         attributes_binding_object cubeCMDs;
@@ -46,21 +45,20 @@ int main(int, char*[])
         glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
 
         // store the projection matrix (we only do this once now) (note: we're not using zoom anymore by changing the FoV)
-        glm::mat4 projection = glm::perspective(45.0f, (float)my_context.screen_width() / (float)my_context.screen_height(), 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(45.0f, (float)ogl_context.screen_width() / (float)ogl_context.screen_height(), 0.1f, 100.0f);
         glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-        FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-        win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
+        FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
+        win_cam_pos_fps_init((int)ogl_context.io->DisplaySize.x, (int)ogl_context.io->DisplaySize.y);
 
-        bool quit = false;
-        while (!quit) {
+        while (!ogl_context.should_close()) {
                 glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // set the view and projection matrix in the uniform block - we only have to do this once per loop iteration.
-                glm::mat4 view = my_cam.GetViewMatrix();
+                glm::mat4 view = camera.GetViewMatrix();
                 glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
                 glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
                 glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -92,11 +90,10 @@ int main(int, char*[])
                 shaderBlue.setMat4("model", model);
                 glDrawArrays(GL_TRIANGLES, 0, 36);
 
-                win_cam_pos_fps(my_cam, my_context);
+                win_cam_pos_fps(camera, ogl_context);
 
-                my_context.swap();
-            bool lol;
-            handle_events(quit, my_cam, my_context, lol);
+                ogl_context.swap();
+                ogl_context.check_keys(camera);
         }
         return 0;
 }

@@ -2,7 +2,6 @@
 #include "shader.h"
 #include "model.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "stb_image.h"
 #include "win_cam_pos_fps.h"
 
@@ -13,8 +12,8 @@ int main(int, char*[]) {
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     constexpr auto textures_are_flipped = true;
     stbi_set_flip_vertically_on_load(textures_are_flipped);
-    Shader sh_asteroid("../shaders/13-15-asteroids.vert", "../shaders/13-15-asteroids.frag");
-    Shader sh_planet("../shaders/13-15-planet.vert", "../shaders/13-15-planet.frag");
+    Shader sh_asteroid("13-15-asteroids.vert", "13-15-asteroids.frag");
+    Shader sh_planet("13-15-planet.vert", "13-15-planet.frag");
     model rock("../assets/rock/rock.obj");
     model planet("../assets/planet/planet.obj");
     FlyCam my_cam(glm::vec3(0.f, 0.f, 55.f));
@@ -62,8 +61,7 @@ int main(int, char*[]) {
 
     win_cam_pos_fps_init((int)ogl_app.io->DisplaySize.x, (int)ogl_app.io->DisplaySize.y);
 
-    bool quit = false;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -95,8 +93,8 @@ int main(int, char*[]) {
 
         win_cam_pos_fps(my_cam, ogl_app);
         ogl_app.swap();
-        bool lol;
-        handle_events(quit, my_cam, ogl_app, lol);
+        FlyCam camera;
+        ogl_app.check_keys(camera);
     }
     delete modelMatrices;
     return EXIT_SUCCESS;

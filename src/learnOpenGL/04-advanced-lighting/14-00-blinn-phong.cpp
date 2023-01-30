@@ -4,7 +4,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 
 int main(int, char *[] ) {
@@ -23,27 +22,26 @@ int main(int, char *[] ) {
     planeCMDs.add_attribute_floats_array(2, 2, 8, 6);
     attributes_binding_object::unbind();
 
-    texture floor("../assets/wood.png");
-    Shader shader("../shaders/14-00-blinn-phong.vert", "../shaders/14-00-blinn-phong.frag");
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+    texture floor("wood.png");
+    Shader shader("14-00-blinn-phong.vert", "14-00-blinn-phong.frag");
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
     glm::vec3 lightPos(0.0f, 1.0f, 0.0f);
 
     // render loop
-    bool quit = false;
     bool blinn = false;
     planeCMDs.bind();
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw objects
         shader.use();
         shader.setInt("texture1", 0);
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
         shader.setMat4("projection", projection);
-        shader.setMat4("view", my_cam.GetViewMatrix());
+        shader.setMat4("view", camera.GetViewMatrix());
         // set light uniforms
-        shader.setVec3("viewPos", my_cam.Position);
+        shader.setVec3("viewPos", camera.Position);
         //lightPos[1] = sin(3 * ogl_app.time());
         shader.setVec3("lightPos", lightPos);
         shader.setInt("blinn", blinn);
@@ -51,10 +49,12 @@ int main(int, char *[] ) {
         floor.activate(0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
+        if ( glfwGetKey(ogl_app.get_win(), GLFW_KEY_B) == GLFW_PRESS)
+            blinn = !blinn;
         std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app, blinn);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

@@ -2,7 +2,6 @@
 #include "shader.h"
 #include "model.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "stb_image.h"
 
 int main(int, char*[]) {
@@ -13,7 +12,7 @@ int main(int, char*[]) {
     constexpr auto textures_are_flipped = true;
 
     stbi_set_flip_vertically_on_load(true);
-    Shader shader("../shaders/model.vert", "../shaders/model.frag");
+    Shader shader("model.vert", "model.frag");
 
     model celt("../assets/extra/celt/Celt 07.fbx", textures_are_flipped);
     model backpack("../assets/backpack/backpack.obj", textures_are_flipped);
@@ -25,11 +24,10 @@ int main(int, char*[]) {
     //model backpack("../assets/hk433/hk443.obj", textures_are_flipped);
     //model backpack("../assets/train/train.fbx", textures_are_flipped);
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-    //my_cam.MovementSpeed = 100.;
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
+    //camera.MovementSpeed = 100.;
 
-    bool quit = false;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -37,11 +35,11 @@ int main(int, char*[]) {
         shader.use();
 
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom),
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
                                                 (float) ogl_app.screen_width() / (float) ogl_app.screen_height(),
                                                 0.1f,
                                                 100.0f);
-        glm::mat4 view = my_cam.GetViewMatrix();
+        glm::mat4 view = camera.GetViewMatrix();
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
 
@@ -79,8 +77,7 @@ int main(int, char*[]) {
         vampire.draw(shader);
 
         ogl_app.swap();
-        bool lol;
-        handle_events(quit, my_cam, ogl_app, lol);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

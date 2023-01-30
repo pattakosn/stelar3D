@@ -1,17 +1,16 @@
 #include "shader.h"
 #include "ogl_context.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "datapoints.h"
 
 int main(int, char *[]) {
-    ogl_context my_context;
+    ogl_context ogl_context;
     glEnable(GL_DEPTH_TEST);
 
-    Shader itemShader("../shaders/PN-MVP.vert", "../shaders/obj_pos_color-diffuse.frag");
-    Shader lampShader("../shaders/PN-MVP.vert", "../shaders/lamp.frag");
+    Shader itemShader("PN-MVP.vert", "obj_pos_color-diffuse.frag");
+    Shader lampShader("PN-MVP.vert", "lamp.frag");
 
     vertex_array box;
     box.add_buffer(cube_normals, sizeof(cube_normals));
@@ -30,18 +29,17 @@ int main(int, char *[]) {
     // set the vertex attributes (only position data for our lamp)
     lamp.add_attribute_floats_array(0, 3, 6, 0);
 
-    FlyCam my_cam(glm::vec3(1.8f, 2.0f, 2.5f));
-    //my_cam.MovementSpeed = 100.;
+    FlyCam camera(glm::vec3(1.8f, 2.0f, 2.5f));
+    //camera.MovementSpeed = 100.;
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
-    bool quit = false;
-    while (!quit) {
+    while (!ogl_context.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(my_cam.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
-        glm::mat4 view = my_cam.GetViewMatrix();
+        projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
 
         // don't forget to 'use' the corresponding shader program first (to set the uniform)
@@ -69,10 +67,8 @@ int main(int, char *[]) {
 
         lamp.bind();
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        my_context.swap();
-
-        bool lol;
-        handle_events(quit, my_cam, my_context, lol);
+        ogl_context.swap();
+        ogl_context.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

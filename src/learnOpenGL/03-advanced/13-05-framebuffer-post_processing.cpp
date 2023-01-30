@@ -2,7 +2,6 @@
 #include "fly_cam.h"
 #include "shader.h"
 #include "datapoints.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "texture.h"
@@ -10,14 +9,14 @@
 
 int main(int, char*[])
 {
-        ogl_context my_context;//"sth", 480, 320);
+        ogl_context ogl_context;//"sth", 480, 320);
         glEnable(GL_DEPTH_TEST);
 
         // build and compile shaders
-        Shader shader("../shaders/P-MVP-1T.vert", "../shaders/1T-apply.frag");
-        //Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_inversed.frag");
-        //Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_greyscaled.frag");
-        Shader screenShader("../shaders/P-1T.vert", "../shaders/1T-apply_greyscaledWeighted.frag");
+        Shader shader("P-MVP-1T.vert", "1T-apply.frag");
+        //Shader screenShader("P-1T.vert", "1T-apply_inversed.frag");
+        //Shader screenShader("P-1T.vert", "1T-apply_greyscaled.frag");
+        Shader screenShader("P-1T.vert", "1T-apply_greyscaledWeighted.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // cube VAO
@@ -43,8 +42,8 @@ int main(int, char*[])
         mirror_quadCMDs.add_attribute_floats_array(1, 2, 4, 2);
 
         // load textures
-        texture cubeTexture("../assets/extra/mariaKids.jpg");//wooden_container.jpg");
-        texture floorTexture("../assets/metal.png");
+        texture cubeTexture("extra/mariaKids.jpg");//wooden_container.jpg");
+        texture floorTexture("metal.png");
 
         // shader configuration
         shader.use();
@@ -55,15 +54,14 @@ int main(int, char*[])
 
         // framebuffer configuration
         frame_buffer fbo;
-        fbo.as_renderbuffer(my_context.screen_width(), my_context.screen_height());
+        fbo.as_renderbuffer(ogl_context.screen_width(), ogl_context.screen_height());
         frame_buffer::unbind();
 
         glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
-        FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+        FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-        bool quit = false;
-        while(!quit) {
-                // bind to framebuffer and draw scene as we normally would to color texture
+        while (!ogl_context.should_close()) {
+            // bind to framebuffer and draw scene as we normally would to color texture
                 fbo.bind();
                 // make sure we clear the framebuffer's content
                 glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -72,8 +70,8 @@ int main(int, char*[])
 
                 shader.use();
                 glm::mat4 model = glm::mat4(1.0f);
-                glm::mat4 view = my_cam.GetViewMatrix();
-                glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)my_context.screen_width() / (float)my_context.screen_height(), 0.1f, 100.0f);
+                glm::mat4 view = camera.GetViewMatrix();
+                glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_context.screen_width() / (float)ogl_context.screen_height(), 0.1f, 100.0f);
                 shader.setMat4("view", view);
                 shader.setMat4("projection", projection);
 
@@ -107,9 +105,8 @@ int main(int, char*[])
                 fbo.bind_texture();
                 glDrawArrays(GL_TRIANGLES, 0, 6);
 
-                my_context.swap();
-            bool lol;
-            handle_events(quit, my_cam, my_context, lol);
+                ogl_context.swap();
+                ogl_context.check_keys(camera);
         }
         return EXIT_SUCCESS;
 }

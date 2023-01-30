@@ -2,7 +2,6 @@
 #include "fly_cam.h"
 #include "shader.h"
 #include "datapoints.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "texture.h"
@@ -10,13 +9,13 @@
 
 int main(int, char*[])
 {
-        ogl_context my_context;//"sth", 480, 320);
+        ogl_context ogl_context;//"sth", 480, 320);
         glEnable(GL_DEPTH_TEST);
 
         // build and compile shaders
-        //Shader shader("../shaders/PN-MVP-WhichIsCorrect.vert", "../shaders/1Tcubemap-reflection.frag");
-        Shader shader("../shaders/PN-MVP-WhichIsCorrect.vert", "../shaders/1Tcubemap-refraction.frag", "../shaders/pass-through.geom");
-        Shader skyboxShader("../shaders/skybox.vert", "../shaders/skybox.frag");
+        //Shader shader("PN-MVP-WhichIsCorrect.vert", "1Tcubemap-reflection.frag");
+        Shader shader("PN-MVP-WhichIsCorrect.vert", "1Tcubemap-refraction.frag", "pass-through.geom");
+        Shader skyboxShader("skybox.vert", "skybox.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // cube VAO
@@ -51,12 +50,11 @@ int main(int, char*[])
         skyboxShader.use();
         skyboxShader.setInt("skybox", 0);
 
-        FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+        FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-        win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
+        win_cam_pos_fps_init((int)ogl_context.io->DisplaySize.x, (int)ogl_context.io->DisplaySize.y);
 
-        bool quit = false;
-        while(!quit) {
+        while (!ogl_context.should_close()) {
                 // make sure we clear the framebuffer's content
                 glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
@@ -64,8 +62,8 @@ int main(int, char*[])
 
                 shader.use();
                 glm::mat4 model = glm::mat4(1.0f);
-                glm::mat4 view = my_cam.GetViewMatrix();
-                glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)my_context.screen_width() / (float)my_context.screen_height(), 0.1f, 100.0f);
+                glm::mat4 view = camera.GetViewMatrix();
+                glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_context.screen_width() / (float)ogl_context.screen_height(), 0.1f, 100.0f);
                 shader.setMat4("view", view);
                 shader.setMat4("projection", projection);
 
@@ -74,7 +72,7 @@ int main(int, char*[])
                 cubemapTexture.activate(GL_TEXTURE0);
                 model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
                 shader.setMat4("model", model);
-                shader.setVec3("cameraPos", my_cam.Position);
+                shader.setVec3("cameraPos", camera.Position);
                 glDrawArrays(GL_TRIANGLES, 0, 36);
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
@@ -85,7 +83,7 @@ int main(int, char*[])
                 // change depth function so depth test passes when values are equal to depth buffer's content
                 glDepthFunc(GL_LEQUAL);
                 skyboxShader.use();
-                view = glm::mat4(glm::mat3(my_cam.GetViewMatrix())); // remove translation from the view matrix
+                view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
                 skyboxShader.setMat4("view", view);
                 skyboxShader.setMat4("projection", projection);
                 // skybox cube
@@ -96,11 +94,10 @@ int main(int, char*[])
                 attributes_binding_object::unbind();
                 glDepthFunc(GL_LESS); // set depth function back to default
 
-                win_cam_pos_fps(my_cam, my_context);
+                win_cam_pos_fps(camera, ogl_context);
 
-                my_context.swap();
-            bool lol;
-            handle_events(quit, my_cam, my_context, lol);
+                ogl_context.swap();
+                ogl_context.check_keys(camera);
         }
         return EXIT_SUCCESS;
 }

@@ -1,18 +1,17 @@
 #include "shader.h"
 #include "ogl_context.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "datapoints.h"
 #include "texture.h"
 
 int main(int, char *[]) {
-    ogl_context my_context;
+    ogl_context ogl_context;
     glEnable(GL_DEPTH_TEST);
 
-    Shader itemShader("../shaders/PN-MVP-1T.vert", "../shaders/PN-DiffusiveSpecularMat-Lights_Viewpos.frag");
-    Shader lampShader("../shaders/PN-MVP.vert", "../shaders/lamp.frag");
+    Shader itemShader("PN-MVP-1T.vert", "PN-DiffusiveSpecularMat-Lights_Viewpos.frag");
+    Shader lampShader("PN-MVP.vert", "lamp.frag");
 
     vertex_array box;
     box.add_buffer(cube_normals_textures, sizeof(cube_normals_textures));
@@ -23,25 +22,24 @@ int main(int, char *[]) {
     item.add_attribute_floats_array(1, 3, 8, 3);
     item.add_attribute_floats_array(2, 2, 8, 6);
 
-    texture box_diffuse("../assets/container-diffusion.png");
-    texture box_specular("../assets/container-specular.png");
+    texture box_diffuse("container-diffusion.png");
+    texture box_specular("container-specular.png");
 
     attributes_binding_object lamp;
     lamp.bind();
     box.bind();
     lamp.add_attribute_floats_array(0, 3, 8, 0);
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-    //my_cam.MovementSpeed = 100.;
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
+    //camera.MovementSpeed = 100.;
 
-    bool quit = false;
-    while (!quit) {
+    while (!ogl_context.should_close()) {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // don't forget to 'use' the corresponding shader program first (to set the uniform)
         itemShader.use();
-        itemShader.setVec3("viewPos", my_cam.Position);
+        itemShader.setVec3("viewPos", camera.Position);
         itemShader.setFloat("material.shininess", 32.0f);
 
         //   Here we set all the uniforms for the 5/6 types of lights we have. We have to set them manually and index
@@ -86,8 +84,8 @@ int main(int, char *[]) {
         itemShader.setFloat("pointLights[3].linear", 0.09f);
         itemShader.setFloat("pointLights[3].quadratic", 0.032f);
         // spotLight
-        itemShader.setVec3("spotLight.position", my_cam.Position);
-        itemShader.setVec3("spotLight.direction", my_cam.Front);
+        itemShader.setVec3("spotLight.position", camera.Position);
+        itemShader.setVec3("spotLight.direction", camera.Front);
         itemShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
         itemShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
         itemShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
@@ -99,20 +97,20 @@ int main(int, char *[]) {
 
 
 
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom),
-                                                (float) my_context.screen_width() / (float) my_context.screen_height(),
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
+                                                (float) ogl_context.screen_width() / (float) ogl_context.screen_height(),
                                                 0.1f,
                                                 100.0f);
         itemShader.setMat4("projection", projection);
 
-        glm::mat4 view = my_cam.GetViewMatrix();
+        glm::mat4 view = camera.GetViewMatrix();
         itemShader.setMat4("view", view);
 
-        itemShader.setVec3("light.position",  my_cam.Position);
-        itemShader.setVec3("light.direction", my_cam.Front);
+        itemShader.setVec3("light.position", camera.Position);
+        itemShader.setVec3("light.direction", camera.Front);
         itemShader.setFloat("light.cutOff",   glm::cos(glm::radians(12.5f)));
         itemShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-        itemShader.setVec3("viewPos", my_cam.Position);
+        itemShader.setVec3("viewPos", camera.Position);
 
         itemShader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
         itemShader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
@@ -155,9 +153,8 @@ int main(int, char *[]) {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        my_context.swap();
-        bool lol;
-        handle_events(quit, my_cam, my_context, lol);
+        ogl_context.swap();
+        ogl_context.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

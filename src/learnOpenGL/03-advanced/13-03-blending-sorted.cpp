@@ -5,17 +5,16 @@
 #include "vertex_array.h"
 #include "fly_cam.h"
 #include "datapoints.h"
-#include "handle_events.h"
 #include <map>
 
 int main(int, char *[])
 {
-        ogl_context my_context;
+        ogl_context ogl_context;
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        Shader shader("../shaders/P-MVP-1T.vert", "../shaders/1T-apply.frag");
+        Shader shader("P-MVP-1T.vert", "1T-apply.frag");
 
         // cubeVAO, cubeVBO
         attributes_binding_object cubeCMDs;
@@ -42,9 +41,9 @@ int main(int, char *[])
         transparentCMDs.add_attribute_floats_array(1, 2, 5, 3);
         transparentCMDs.unbind();
 
-        texture marbleTexture("../assets/marble.jpg");
-        texture floorTexture("../assets/metal.png");
-        texture window("../assets/transparent_window.png");
+        texture marbleTexture("marble.jpg");
+        texture floorTexture("metal.png");
+        texture window("transparent_window.png");
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         std::vector<glm::vec3> windows;
@@ -58,24 +57,23 @@ int main(int, char *[])
         shader.use();
         shader.setInt("texture1", 0);
 
-        FlyCam my_cam(glm::vec3(0.f, 1.f, 3.f));
+        FlyCam camera(glm::vec3(0.f, 1.f, 3.f));
 
-        bool quit = false;
-        while(!quit) {
+        while (!ogl_context.should_close()) {
                 glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // sort the transparent windows before rendering
                 std::map<float, glm::vec3> sorted;
                 for (auto & win : windows) {
-                        float distance = glm::length(my_cam.Position - win);
+                        float distance = glm::length(camera.Position - win);
                         sorted[distance] = win;
                 }
 
                 shader.use();
                 glm::mat4 model = glm::mat4(1.0f);
-                glm::mat4 view = my_cam.GetViewMatrix();
-                glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)my_context.screen_width() / (float)my_context.screen_height(), 0.1f, 100.0f);
+                glm::mat4 view = camera.GetViewMatrix();
+                glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_context.screen_width() / (float)ogl_context.screen_height(), 0.1f, 100.0f);
                 shader.setMat4("view", view);
                 shader.setMat4("projection", projection);
 
@@ -104,9 +102,8 @@ int main(int, char *[])
                         glDrawArrays(GL_TRIANGLES, 0, 6);
                 }
 
-                my_context.swap();
-            bool lol;
-            handle_events(quit, my_cam, my_context, lol);
+                ogl_context.swap();
+            ogl_context.check_keys(camera);
         }
         return EXIT_SUCCESS;
 }

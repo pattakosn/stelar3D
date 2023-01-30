@@ -1,6 +1,6 @@
 #ifndef STELAR3D_FRAME_BUFFER_H
 #define STELAR3D_FRAME_BUFFER_H
-#include "glad/glad.h"
+#include "glad/gl.h"
 #include "texture.h"
 #include "render_buffer.h"
 

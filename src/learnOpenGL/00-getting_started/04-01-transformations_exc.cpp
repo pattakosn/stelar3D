@@ -1,4 +1,3 @@
-#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "shader.h"
@@ -10,9 +9,9 @@
 
 int main(int, char*[])
 {
-	ogl_context my_context;
+	ogl_context ogl_context;
 
-	Shader my_shader("../shaders/04-00-2textures_moved.vert", "../shaders/04-00-2textures_moved.frag");
+	Shader my_shader("04-00-2textures_moved.vert", "04-00-2textures_moved.frag");
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
@@ -40,20 +39,16 @@ int main(int, char*[])
     element_array triangle_idx;
     triangle_idx.add_buffer(indices,sizeof(indices));
 
-    texture wood_box("../assets/wooden_container.jpg", true);
-    texture face("../assets/awesomeface.png", true);
-
-	auto timeS = SDL_GetTicks();
+    texture wood_box("wooden_container.jpg", true);
+    texture face("awesomeface.png", true);
 
 	my_shader.use();
 	glUniform1i(glGetUniformLocation(my_shader.ID, "texture0"), 0); // set it manually
 	my_shader.setInt("texture1", 1); // or with shader class
 
-
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	SDL_Event event;
-	bool quit = false;
-	while (!quit) {
+    FlyCam camera;
+    while (!ogl_context.should_close()) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		my_shader.use();
 		wood_box.activate(GL_TEXTURE0);
@@ -62,48 +57,21 @@ int main(int, char*[])
 		glm::mat4 trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
 		trans = glm::scale(trans, glm::vec3(0.65, 0.65, 0.65));
-		auto timeN = SDL_GetTicks();
-		auto dt = (timeN-timeS)/25.f;
+
+		auto dt = (float)glfwGetTime();
 		trans = glm::rotate(trans, glm::radians(dt), glm::vec3(0.0f, 0.0f, 1.0f));
 		my_shader.setMat4("transform", trans);
 		triangle.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		trans = glm::mat4(1.0f);
 		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-		dt = std::abs(sin(glm::radians((float)timeN)/25 ));
+		dt = std::abs(sin(glm::radians((float)glfwGetTime())/25 ));
 		trans = glm::scale(trans, glm::vec3(0.65 * dt, 0.65 * dt, 0.65 * dt));
 		my_shader.setMat4("transform", trans);
 		triangle.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		my_context.swap();
-
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-				case SDL_KEYDOWN:
-					switch (event.key.keysym.sym) {
-						case SDLK_ESCAPE:
-						case SDLK_q:
-							quit = true;
-							break;
-					}
-					break;
-				case SDL_QUIT:
-					quit = true;
-					break;
-				case SDL_WINDOWEVENT:
-					switch (event.window.event) {
-						case SDL_WINDOWEVENT_RESIZED:
-							std::cout << "MESSAGE:Resizing window...\n";
-							//resizeWindow(m_event.window.data1, m_event.window.data2);
-							std::cout << "MESSAGE: Window [width x height] = " << event.window.data1 << " x " << event.window.data2 << "\n";//%d, %d\n", windowWidth, windowHeight);
-							//m_camera->resizeWindow(windowWidth, windowHeight);
-							//TODO: move this to gl_context so as to update WIDTH/HEIGHT
-							glViewport(0, 0, event.window.data1, event.window.data2);
-							break;
-					}
-					break;
-			}
-		}
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		ogl_context.swap();
+        ogl_context.check_keys(camera);
 	}
 	return EXIT_SUCCESS;
 }

@@ -3,7 +3,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 
 // renders a 1x1 quad in NDC with manually calculated tangent vectors
@@ -115,9 +114,7 @@ int main(int, char *[]) {
 //        else
 //            heightScale = 1.0f;
 //    }
-    bool quit = false;
-    bool shadows = true;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -152,7 +149,7 @@ int main(int, char *[]) {
         renderQuad(quadCMD );
 
         ogl_app.swap();
-        handle_events(quit, camera, ogl_app, shadows);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

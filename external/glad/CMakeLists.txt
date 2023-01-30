@@ -12,5 +12,6 @@ target_link_libraries(glad PUBLIC ${CMAKE_DL_LIBS})
 #    set_target_properties(glad2 PROPERTIES DEFINE_SYMBOL "GLAD_API_CALL_EXPORT_BUILD")
 #endif()
 
-add_library(glad-vulkan SHARED src/vulkan.c)
-add_library(glad::gladV ALIAS glad-vulkan)
+#add_library(glad-vulkan SHARED src/vulkan.c)
+#target_include_directories(glad-vulkan PUBLIC include)
+#add_library(glad::gladV ALIAS glad-vulkan)

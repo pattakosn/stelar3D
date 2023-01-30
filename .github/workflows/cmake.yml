@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: libsdl2-dev libassimp-dev
+        packages: libglfw3-dev libassimp-dev
 
     - name: Checkout repository
       uses: actions/checkout@v2

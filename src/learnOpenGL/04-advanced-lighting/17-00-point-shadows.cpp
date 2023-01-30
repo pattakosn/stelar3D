@@ -4,7 +4,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 #include "depth_cubemap.h"
 
@@ -63,7 +62,7 @@ int main(int, char *[]) {
     scene.use();
     scene.setInt("diffuseTexture", 0);
     scene.setInt("depthMap", 1);
-    Shader depth("../shaders/17-00-point-shadow-depth.vert", "../shaders/17-00-point-shadow-depth.frag", "../shaders/17-00-point-shadow-depth.geom");
+    Shader depth("17-00-point-shadow-depth.vert", "17-00-point-shadow-depth.frag", "17-00-point-shadow-depth.geom");
 
     // load textures
     texture floor("wood.png");
@@ -81,10 +80,9 @@ int main(int, char *[]) {
     depth_cubemap depthMap(SHADOW_WIDTH, SHADOW_HEIGHT);
 
     glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-    bool quit = false;
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
     bool shadows = true;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         // move light position over time
         lightPos.z = static_cast<float>(sin(ogl_app.time() * 0.5) * 3.0);
 
@@ -119,13 +117,13 @@ int main(int, char *[]) {
         glViewport(0, 0, ogl_app.screen_width(), ogl_app.screen_height());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         scene.use();
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), ((float)ogl_app.screen_width() / (float)ogl_app.screen_height()), 0.1f, 100.0f);
-        glm::mat4 view = my_cam.GetViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), ((float)ogl_app.screen_width() / (float)ogl_app.screen_height()), 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
         scene.setMat4("projection", projection);
         scene.setMat4("view", view);
         // set lighting uniforms
         scene.setVec3("lightPos", lightPos);
-        scene.setVec3("viewPos", my_cam.Position);
+        scene.setVec3("viewPos", camera.Position);
         scene.setInt("shadows", shadows); // enable/disable shadows by pressing 'b'
         scene.setFloat("far_plane", far_plane);
         floor.activate(GL_TEXTURE0);
@@ -133,7 +131,10 @@ int main(int, char *[]) {
         renderScene(scene, cubeCMD);
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app, shadows);
+        if ( glfwGetKey(ogl_app.get_win(), GLFW_KEY_B) == GLFW_PRESS)
+            shadows = !shadows;
+        std::cout << (shadows ? "Shadows" : "No Shadows") << std::endl;
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

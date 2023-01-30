@@ -2,16 +2,15 @@
 #include "fly_cam.h"
 #include "shader.h"
 #include "datapoints.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 
 int main(int, char*[]) {
-    ogl_context my_context;
+    ogl_context ogl_context;
     glEnable(GL_DEPTH_TEST);
 
-    Shader houseGeomShader("../shaders/13-10-house_geometry.vert", "../shaders/13-10-house_geometry.frag",
-                  "../shaders/13-10-house_geometry.geom");
+    Shader houseGeomShader("13-10-house_geometry.vert", "13-10-house_geometry.frag",
+                  "13-10-house_geometry.geom");
 
     attributes_binding_object houseCMDs;
     houseCMDs.bind();
@@ -21,10 +20,9 @@ int main(int, char*[]) {
     houseCMDs.add_attribute_floats_array(1,3,5,2);
     attributes_binding_object::unbind();
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-    bool quit = false;
-    while(!quit) {
+    while (!ogl_context.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -33,9 +31,8 @@ int main(int, char*[]) {
         houseCMDs.bind();
         glDrawArrays(GL_POINTS, 0, 4);
 
-        my_context.swap();
-        bool lol;
-        handle_events(quit, my_cam, my_context, lol);
+        ogl_context.swap();
+        ogl_context.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

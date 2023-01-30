@@ -4,19 +4,16 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 #include "depth_map_artifacts.h"
 
-void renderCube(attributes_binding_object& cubeCMD)
-{
+void renderCube(attributes_binding_object& cubeCMD) {
     cubeCMD.bind();
     glDrawArrays(GL_TRIANGLES, 0, 36);
     attributes_binding_object::unbind();
 }
 
-void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, attributes_binding_object& cubeCMD)
-{
+void renderScene(const Shader &shader, attributes_binding_object& planeCMDs, attributes_binding_object& cubeCMD) {
     // floor
     glm::mat4 model = glm::mat4(1.0f);
     shader.setMat4("model", model);
@@ -82,7 +79,7 @@ int main(int, char *[]) {
     cubeCMD.add_attribute_floats_array(2, 2, 8, 6);
 
 
-    texture floor("../assets/wood.png");
+    texture floor("wood.png");
 
     // configure depth map FBO
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
@@ -91,11 +88,9 @@ int main(int, char *[]) {
     // lighting info
     glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-    bool quit = false;
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
     planeCMDs.bind();
-    bool check;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -123,12 +118,12 @@ int main(int, char *[]) {
 
         // 2. render scene as normal using the generated depth/shadow map
         scene.use();
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
-        glm::mat4 view = my_cam.GetViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
         scene.setMat4("projection", projection);
         scene.setMat4("view", view);
         // set light uniforms
-        scene.setVec3("viewPos", my_cam.Position);
+        scene.setVec3("viewPos", camera.Position);
         scene.setVec3("lightPos", lightPos);
         scene.setMat4("lightSpaceMatrix", lightSpaceMatrix);
         floor.activate(GL_TEXTURE0);
@@ -145,7 +140,7 @@ int main(int, char *[]) {
         //quadCMD.unbind();
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app, check);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

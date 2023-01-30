@@ -4,7 +4,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 #include "depth_map_artifacts.h"
 
@@ -13,8 +12,8 @@ int main(int, char *[]) {
     glEnable(GL_DEPTH_TEST);
 
     // build and compile shaders
-    Shader depth("../shaders/16-00-depth.vert", "../shaders/16-00-depth.frag");
-    Shader depthDbg("../shaders/16-00-depth-dbg.vert", "../shaders/16-00-depth-dbg.frag");
+    Shader depth("16-00-depth.vert", "16-00-depth.frag");
+    Shader depthDbg("16-00-depth-dbg.vert", "16-00-depth-dbg.frag");
 
     // plane VAO
     attributes_binding_object planeCMDs;
@@ -43,7 +42,7 @@ int main(int, char *[]) {
     cubeCMD.add_attribute_floats_array(2, 2, 8, 6);
 
 
-    texture floor("../assets/wood.png"); // WOOD TEXTURE
+    texture floor("wood.png"); // WOOD TEXTURE
 
     // configure depth map FBO
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
@@ -56,11 +55,9 @@ int main(int, char *[]) {
     // lighting info
     glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
-    bool quit = false;
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
     planeCMDs.bind();
-    bool check;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -131,7 +128,7 @@ int main(int, char *[]) {
         quadCMD.unbind();//glBindVertexArray(0);
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app, check);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

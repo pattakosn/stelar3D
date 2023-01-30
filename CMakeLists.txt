@@ -31,7 +31,6 @@ endif()
 
 #find_package(OpenMP)
 find_package(OpenGL REQUIRED)
-#find_package(SDL2 CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 set_target_properties(assimp::assimp PROPERTIES MAP_IMPORTED_CONFIG_DEBUG Release)

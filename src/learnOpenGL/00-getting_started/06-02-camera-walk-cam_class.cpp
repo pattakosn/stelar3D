@@ -2,7 +2,6 @@
 #include "ogl_context.h"
 #include "stb_image.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "texture.h"
@@ -10,10 +9,10 @@
 #include "win_cam_pos_fps.h"
 
 int main(int, char *[]) {
-    ogl_context my_context;
+    ogl_context ogl_context;
     glEnable(GL_DEPTH_TEST);
 
-    Shader my_shader("../shaders/05-00-coordinates.vert", "../shaders/05-00-coordinates.frag");
+    Shader my_shader("05-00-coordinates.vert", "05-00-coordinates.frag");
 
     vertex_array triangle_data;
     triangle_data.add_buffer(cube_texture_coords, sizeof(cube_texture_coords));
@@ -25,8 +24,8 @@ int main(int, char *[]) {
     // texture coord attribute
     triangle.add_attribute_floats_array(1, 2, 5, 3);
 
-    texture wood_box("../assets/wooden_container.jpg", true);
-    texture face("../assets/awesomeface.png", true);
+    texture wood_box("wooden_container.jpg", true);
+    texture face("awesomeface.png", true);
 
     FlyCam my_cam(glm::vec3(0.0f, 0.0f, 3.0f));
     //my_cam.MovementSpeed = 100.;
@@ -35,9 +34,8 @@ int main(int, char *[]) {
     glUniform1i(glGetUniformLocation(my_shader.ID, "texture0"), 0); // set it manually
     my_shader.setInt("texture1", 1); // or with shader class
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    bool quit = false;
-    win_cam_pos_fps_init((int)my_context.io->DisplaySize.x, (int)my_context.io->DisplaySize.y);
-    while (!quit) {
+    win_cam_pos_fps_init((int)ogl_context.io->DisplaySize.x, (int)ogl_context.io->DisplaySize.y);
+    while (!ogl_context.should_close()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         my_shader.use();
         wood_box.activate(GL_TEXTURE0);
@@ -58,19 +56,19 @@ int main(int, char *[]) {
         for (unsigned int i = 0; i < 20; i++) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cube_random_positions[i]);
-            float angle = 20.0f * (i + 1);
+            float angle = 20.0f * (i + 1.f);
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            model = glm::rotate(model, my_context.time() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            model = glm::rotate(model, static_cast<float>(glfwGetTime()) * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             my_shader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        win_cam_pos_fps(my_cam, my_context);
+        win_cam_pos_fps(my_cam, ogl_context);
 
-        my_context.swap();
-        bool lol;
-        handle_events(quit, my_cam, my_context, lol);
+        ogl_context.swap();
+        FlyCam camera;
+        ogl_context.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

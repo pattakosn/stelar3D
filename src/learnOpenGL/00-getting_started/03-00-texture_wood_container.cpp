@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ogl_context.h"
 #include "shader.h"
 #include "vertex_array.h"
@@ -8,9 +7,9 @@
 
 int main(int, char*[])
 {
-	ogl_context my_context;
+	ogl_context ogl_context;
 
-	Shader my_shader("../shaders/03-00-texture_wood_container.vert", "../shaders/03-00-texture_wood_container.frag");
+	Shader my_shader("03-00-texture_wood_container.vert", "03-00-texture_wood_container.frag");
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
@@ -38,47 +37,19 @@ int main(int, char*[])
     element_array triangle_idx;
     triangle_idx.add_buffer(indices,sizeof(indices));
 
-    texture wood_box("../assets/wooden_container.jpg");
+    texture wood_box("wooden_container.jpg");
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	SDL_Event event;
-	bool quit = false;
-	while (!quit) {
+    FlyCam camera;
+    while (!ogl_context.should_close()) {
 		glClear(GL_COLOR_BUFFER_BIT);
         // bind Texture
         wood_box.bind();
 		my_shader.use();
 		triangle.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		my_context.swap();
-
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
-				case SDLK_q:
-					quit = true;
-					break;
-				}
-				break;
-			case SDL_QUIT:
-				quit = true;
-				break;
-			case SDL_WINDOWEVENT:
-				switch (event.window.event) {
-				case SDL_WINDOWEVENT_RESIZED:
-					std::cout << "MESSAGE:Resizing window...\n";
-					//resizeWindow(m_event.window.data1, m_event.window.data2);
-					std::cout << "MESSAGE: Window [width x height] = " << event.window.data1 << " x " << event.window.data2 << "\n";//%d, %d\n", windowWidth, windowHeight);
-					//m_camera->resizeWindow(windowWidth, windowHeight);
-					//TODO: move this to gl_context so as to update WIDTH/HEIGHT
-					glViewport(0, 0, event.window.data1, event.window.data2);
-					break;
-				}
-				break;
-			}
-		}
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		ogl_context.swap();
+		ogl_context.check_keys(camera);
 	}
 	return EXIT_SUCCESS;
 }

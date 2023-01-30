@@ -4,7 +4,6 @@ add_library(stelar3D
     ogl_context.cpp ogl_context.h
     ogl_debug.cpp ogl_debug.h
     stb_image.c stb_image.h
-    handle_events.cpp handle_events.h
     attributes_binding_object.cpp attributes_binding_object.h
     vertex_array.cpp vertex_array.h
     element_array.cpp element_array.h

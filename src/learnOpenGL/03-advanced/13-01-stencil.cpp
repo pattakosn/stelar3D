@@ -5,11 +5,10 @@
 #include "vertex_array.h"
 #include "fly_cam.h"
 #include "datapoints.h"
-#include "handle_events.h"
 
 int main(int, char *[])
 {
-        ogl_context my_context;
+        ogl_context ogl_context;
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
@@ -17,8 +16,8 @@ int main(int, char *[])
         glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-        Shader my_shader("../shaders/P-MVP-1T.vert", "../shaders/1T-apply.frag");
-        Shader my_shader_outline("../shaders/P-MVP-1T.vert", "../shaders/greenOutline.frag");
+        Shader my_shader("P-MVP-1T.vert", "1T-apply.frag");
+        Shader my_shader_outline("P-MVP-1T.vert", "greenOutline.frag");
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // cube VAO
@@ -39,24 +38,23 @@ int main(int, char *[])
         planeCMDs.add_attribute_floats_array(1, 2, 5, 3);
         attributes_binding_object::unbind();
 
-        texture marbleTexture("../assets/marble.jpg");
-        texture floorTexture("../assets/metal.png");
+        texture marbleTexture("marble.jpg");
+        texture floorTexture("metal.png");
 
         // shader configuration
         my_shader.use();
         my_shader.setInt("texture1", 0);
 
-        FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+        FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-        bool quit = false;
-        while(!quit) {
+        while (!ogl_context.should_close()) {
                 glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
                 my_shader_outline.use();
                 glm::mat4 model = glm::mat4(1.0f);
-                glm::mat4 view = my_cam.GetViewMatrix();
-                glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)my_context.screen_width() / (float)my_context.screen_height(), 0.1f, 100.0f);
+                glm::mat4 view = camera.GetViewMatrix();
+                glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_context.screen_width() / (float)ogl_context.screen_height(), 0.1f, 100.0f);
                 my_shader_outline.setMat4("view", view);
                 my_shader_outline.setMat4("projection", projection);
 
@@ -112,9 +110,8 @@ int main(int, char *[])
                 glStencilFunc(GL_ALWAYS, 0, 0xFF);
                 glEnable(GL_DEPTH_TEST);
 
-                my_context.swap();
-            bool lol;
-            handle_events(quit, my_cam, my_context, lol);
+                ogl_context.swap();
+            ogl_context.check_keys(camera);
         }
         return EXIT_SUCCESS;
 }

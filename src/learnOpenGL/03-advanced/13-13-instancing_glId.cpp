@@ -4,14 +4,13 @@
 #include "attributes_binding_object.h"
 #include "datapoints.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 
 int main()
 {
     ogl_context ogl_app;
     glEnable(GL_DEPTH_TEST);
 
-    Shader shader("../shaders/13-13-instancing_glId.vert", "../shaders/13-13-instancing_glId.frag");
+    Shader shader("13-13-instancing_glId.vert", "13-13-instancing_glId.frag");
 
     // generate a list of 100 quad locations/translation-vectors
     glm::vec2 translations[100];
@@ -45,10 +44,9 @@ int main()
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 
     glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-    bool quit = false;
-    while(!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -59,8 +57,7 @@ int main()
         glBindVertexArray(0);
 
         ogl_app.swap();
-        bool lol;
-        handle_events(quit, my_cam, ogl_app, lol);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

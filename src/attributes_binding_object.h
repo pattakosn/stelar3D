@@ -1,6 +1,7 @@
 #ifndef ATTRIBUTES_BINDING_OBJECT
 #define ATTRIBUTES_BINDING_OBJECT
-#include "glad/glad.h"
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
 
 class attributes_binding_object {
 public:

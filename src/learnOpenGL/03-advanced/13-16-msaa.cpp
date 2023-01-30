@@ -4,7 +4,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 
 int main(int, char *[])
 {
@@ -13,7 +12,7 @@ int main(int, char *[])
     glEnable(GL_MULTISAMPLE); // enabled by default on some drivers, but not all so always enable to make sure
 
     // build and compile shaders
-    Shader shader("../shaders/13-16-msaa.vert", "../shaders/13-16-msaa.frag");
+    Shader shader("13-16-msaa.vert", "13-16-msaa.frag");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     vertex_array cubeDAT;
@@ -23,27 +22,25 @@ int main(int, char *[])
     cubeCMD.bind();
     cubeCMD.add_attribute_floats_array(0, 3, 5, 0);
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
     // render loop
-    bool quit = false;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // set transformation matrices		
         shader.use();
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 1000.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 1000.0f);
         shader.setMat4("projection", projection);
-        shader.setMat4("view", my_cam.GetViewMatrix());
+        shader.setMat4("view", camera.GetViewMatrix());
         shader.setMat4("model", glm::mat4(1.0f));
 
         cubeCMD.bind();
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         ogl_app.swap();
-        bool lol;
-        handle_events(quit, my_cam, ogl_app, lol);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

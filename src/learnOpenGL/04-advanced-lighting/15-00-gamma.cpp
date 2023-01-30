@@ -4,7 +4,6 @@
 #include "vertex_array.h"
 #include "attributes_binding_object.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "texture.h"
 
 int main(int, char *[]) {
@@ -13,7 +12,7 @@ int main(int, char *[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Shader shader("../shaders/15-00-gamma.vert", "../shaders/15-00-gamma.frag");
+    Shader shader("15-00-gamma.vert", "15-00-gamma.frag");
     shader.use();
     shader.setInt("floorTexture", 0);
 
@@ -27,8 +26,8 @@ int main(int, char *[]) {
     planeCMDs.add_attribute_floats_array(2, 2, 8, 6);
     attributes_binding_object::unbind();
 
-    texture floor("../assets/wood.png");
-    texture floorGammaCorrected("../assets/wood.png", false, true);
+    texture floor("wood.png");
+    texture floorGammaCorrected("wood.png", false, true);
 
     // lighting info
     glm::vec3 lightPositions[] = {
@@ -44,34 +43,35 @@ int main(int, char *[]) {
             glm::vec3(1.00)
     };
 
-    FlyCam my_cam(glm::vec3(0.f, 0.f, 3.f));
+    FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
-    bool quit = false;
     bool gammaEnabled = false;
     planeCMDs.bind();
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw objects
         shader.use();
-        glm::mat4 projection = glm::perspective(glm::radians(my_cam.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
-        glm::mat4 view = my_cam.GetViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)ogl_app.screen_width() / (float)ogl_app.screen_height(), 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
         // set light uniforms
         glUniform3fv(glGetUniformLocation(shader.ID, "lightPositions"), 4, &lightPositions[0][0]);
         glUniform3fv(glGetUniformLocation(shader.ID, "lightColors"), 4, &lightColors[0][0]);
-        shader.setVec3("viewPos", my_cam.Position);
+        shader.setVec3("viewPos", camera.Position);
         shader.setInt("gamma", gammaEnabled);
         // floor
         gammaEnabled ? floorGammaCorrected.activate(0) : floor.activate(0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
+        if ( glfwGetKey(ogl_app.get_win(), GLFW_KEY_G) == GLFW_PRESS)
+            gammaEnabled = !gammaEnabled;
         std::cout << (gammaEnabled ? "Gamma enabled" : "Gamma disabled") << std::endl;
 
         ogl_app.swap();
-        handle_events(quit, my_cam, ogl_app, gammaEnabled);
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

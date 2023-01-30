@@ -2,7 +2,6 @@
 #include "shader.h"
 #include "texture.h"
 #include "fly_cam.h"
-#include "handle_events.h"
 #include "attributes_binding_object.h"
 #include "vertex_array.h"
 #include "datapoints.h"
@@ -89,10 +88,9 @@ int main(int, char*[]) {
     lightColors.push_back(glm::vec3(0.0f, 0.1f, 0.0f));
 
     FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
-    bool quit = false;
     bool hdr = true;
     float exposure = 20.0f;
-    while (!quit) {
+    while (!ogl_app.should_close()) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -129,9 +127,11 @@ int main(int, char*[]) {
         hdrShader.setFloat("exposure", exposure);
         renderQuad(quadCMD);
 
-        std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
         ogl_app.swap();
-        handle_events(quit, camera, ogl_app, hdr);
+        if ( glfwGetKey(ogl_app.get_win(), GLFW_KEY_H) == GLFW_PRESS)
+            hdr = !hdr;
+        std::cout << "hdr: " << (hdr ? "on" : "off") << " | exposure: " << exposure << std::endl;
+        ogl_app.check_keys(camera);
     }
     return EXIT_SUCCESS;
 }

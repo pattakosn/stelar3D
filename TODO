@@ -1,0 +1,5 @@
+* add fullscreen toggle in imgui menu/keyboard shortcut
+* add default imgui widget
+* move/copy keyboard commands to imgui widget?
+* clang-format
+* clang-format prehook

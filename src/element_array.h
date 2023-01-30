@@ -1,6 +1,6 @@
 #ifndef ELEMENT_ARRAY_H
 #define ELEMENT_ARRAY_H
-#include "glad/glad.h"
+#include "glad/gl.h"
 #include <cstddef>
 
 class element_array {

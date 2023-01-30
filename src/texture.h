@@ -1,6 +1,6 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <string>
 #include <vector>
 

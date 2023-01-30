@@ -1,6 +1,6 @@
 #ifndef STELAR3D_RENDER_BUFFER_H
 #define STELAR3D_RENDER_BUFFER_H
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 class render_buffer {
 public:
