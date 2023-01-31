@@ -43,7 +43,7 @@ int main()
     vertex_array::unbind();
     glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 
-    glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
+    //glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
     FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
     while (!ogl_app.should_close()) {

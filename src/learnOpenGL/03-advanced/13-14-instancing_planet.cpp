@@ -19,9 +19,9 @@ int main(int, char*[]) {
     //my_cam.MovementSpeed = 100.;
 
     // generate a large list of semi-random model transformation matrices
-    const unsigned int amount = 80000;
-    glm::mat4* modelMatrices;
-    modelMatrices = new glm::mat4[amount];
+    constexpr size_t amount = 80000;
+    std::vector<glm::mat4> modelMatrices;
+    modelMatrices.reserve(amount);
     srand(static_cast<unsigned int>(ogl_app.time())); // initialize random seed
     float radius = 150.0;
     float offset = 25.f;
@@ -85,6 +85,5 @@ int main(int, char*[]) {
         FlyCam camera;
         ogl_app.check_keys(camera);
     }
-    delete modelMatrices;
     return EXIT_SUCCESS;
 }

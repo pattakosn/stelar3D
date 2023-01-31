@@ -57,7 +57,7 @@ int main(int, char*[])
         fbo.as_renderbuffer(ogl_context.screen_width(), ogl_context.screen_height());
         frame_buffer::unbind();
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
+        //glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam camera(glm::vec3(0.f, 0.f, 3.f));
 
         while (!ogl_context.should_close()) {

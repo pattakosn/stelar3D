@@ -42,7 +42,7 @@ int main(int, char *[])
         my_shader.use();
         my_shader.setInt("texture1", 0);
 
-        glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
+        //glm::vec3 lightPos(0.75f, 0.75f, 0.75f);
         FlyCam camera(glm::vec3(0.f, 1.f, 3.f));
 
         while (!ogl_context.should_close()) {

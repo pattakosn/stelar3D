@@ -1,14 +1,12 @@
 #include "ogl_context.h"
 #include <iostream>
 
-static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+static void framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    static bool wireframe = false;
-    static bool depthTest = false;
-}
+//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+//}
 
 static void glfw_error_callback(int /*error*/, const char* description) {
     fprintf(stderr, "[GLFW] Error: %s\n", description);
@@ -58,9 +56,10 @@ ogl_context::ogl_context(const std::string& win_title, const int w, const int h,
     if (version == 0) {
         glfwTerminate();
         throw std::runtime_error("Error loading GLAD2 OpenGL extension library");
-    } else
-        std::cout << "GLAD2 OpenGL extension loaded:" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
-
+    } else {
+        std::cout << "GLAD2 OpenGL extension loaded:" << GLAD_VERSION_MAJOR(version) << "."
+                  << GLAD_VERSION_MINOR(version) << std::endl;
+    }
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -161,23 +160,25 @@ void ogl_context::check_keys(FlyCam &my_cam) {
         my_cam.ProcessKeyboard(DOWN, dt_);
 
     static bool wireframe = false;
-    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-        if ( wireframe ) {
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+        if (wireframe) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             wireframe = false;
         } else {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            wireframe  = true;
+            wireframe = true;
         }
+    }
     static bool depthTest = false;
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-        if ( depthTest ) {
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        if (depthTest) {
             glDepthFunc(GL_LESS);
             depthTest = false;
         } else {
             glDepthFunc(GL_ALWAYS);
             depthTest = true;
         }
+    }
     if (   glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         my_cam.reset();
 
