@@ -10,14 +10,6 @@
 			"platform": "windows"
 		},
 		{
-			"name": "sdl2",
-			"default-features": false,
-			"features": [
-				"x11"
-			],
-			"platform": "!windows"
-		},
-		{
 			"name": "assimp"
 		}
 	]
