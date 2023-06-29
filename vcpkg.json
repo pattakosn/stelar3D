@@ -1,16 +1,18 @@
 { 
-	"name" : "stelar3d",
-	"description": [ "modern(non fixed pipeline) OpenGL 3D graphics toy code to experiment with 3D graphics.",
-		"Using glad, glfw3, glm, assimp libraries"
-	],
-	"version-string": "0.0.1",
-	"dependencies": [
-		{
-			"name": "glfw3",
-			"platform": "windows"
-		},
-		{
-			"name": "assimp"
-		}
-	]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name" : "stelar3d",
+  "description": [ "modern(non fixed pipeline) OpenGL 3D graphics toy code to experiment with 3D graphics.",
+                   "Using glad, glfw3, glm, assimp libraries"
+   ],
+  "version-semver": "0.0.1",
+  "dependencies": [
+    {
+      "name": "glfw3",
+      "platform": "windows"
+    },
+    {
+      "name": "assimp",
+      "platform": "windows"
+    }
+  ]
 }

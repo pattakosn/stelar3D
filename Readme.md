@@ -65,6 +65,8 @@ sudo dnf install libXi-devel libXxf86vm-devel
 * [Aeon Engine](https://github.com/aeon-engine) (c++14/OpenGL3 game engine)
 * [Vulkan examples](https://github.com/SaschaWillems/Vulkan)
 * [SIMDstring](https://github.com/RobloxResearch/SIMDString) std string compatible replacement using simd
+* [Noesis 3D GUI](http://www.richwhitehouse.com/index.php?content=inc_projects.php&showproject=91)
+* [Juce 3D GUI](https://juce.com/)
 
 ## 3D graphics techniques list
 tangent space
@@ -118,6 +120,8 @@ automatic exposure adjustment or eye adaptation
 # GPU Generations
 
 ## Nvidia
+kepler, hopper, Ada Lovelace
+
 GTX 200
 
 Fermi GTX 400
